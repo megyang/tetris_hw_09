@@ -10,7 +10,7 @@ public class GameArea extends JPanel {
     private int columns;
     private int cellSize;
 
-    private int[][] LBlock = {{1,0},{1,0},{1,1}};
+    private Block block;
     public GameArea(int inColumns) {
         //location of GameArea on the GameForm
         this.setBounds(50,50,400,400);
@@ -19,16 +19,33 @@ public class GameArea extends JPanel {
         columns = inColumns;
         cellSize = this.getBounds().width/columns;
         rows = this.getBounds().height/cellSize;
+
+        produceBlock();
     }
 
-    private void drawBlock(Graphics g, int[][] block){
-        for (int i = 0; i < block.length; i++) {
-            for (int j = 0; j < block[i].length; j++) {
-                if (block[i][j] == 1) {
-                    g.setColor(Color.red);
-                    g.fillRect(j*cellSize + 100, i*cellSize + 100, cellSize, cellSize);
+    public void produceBlock() {
+        block = new Block(new int[][] {{1,0},{1,0},{1,1}}, Color.blue);
+    }
+
+    public void moveDown() {
+        block.moveDown();
+        repaint();
+    }
+    private void drawBlock(Graphics g){
+        int blockHeight = block.getHeight();
+        int blockWidth = block.getWidth();
+        int[][] blockShape = block.getShape();
+        Color blockColor = block.getColor();
+        for (int i = 0; i < blockHeight; i++) {
+            for (int j = 0; j < blockWidth; j++) {
+                if (blockShape[i][j] == 1) {
+                    int x = (block.getX() + j) * cellSize;
+                    int y = (block.getY() + i) * cellSize;
+
+                    g.setColor(blockColor);
+                    g.fillRect(x,y, cellSize, cellSize);
                     g.setColor(Color.black);
-                    g.drawRect(j*cellSize + 100, i*cellSize + 100, cellSize, cellSize);
+                    g.drawRect(x,y, cellSize, cellSize);
                 }
             }
         }
@@ -40,12 +57,6 @@ public class GameArea extends JPanel {
         //call the paintComponent of the superclass (original method)
         super.paintComponent(g);
         //g.fillRect(50,50,100,100);
-        for (int i = 0; i < rows; i++){
-            for (int j = 0; j < columns*2; j ++) {
-                g.drawRect(i * cellSize + 100, j*cellSize + 100, cellSize, cellSize);
-            }
-        }
-
-        drawBlock(g,LBlock);
+        drawBlock(g);
     }
 }

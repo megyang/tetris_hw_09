@@ -11,10 +11,15 @@ import javax.swing.*;
 //overriding is giving a method a different body
 
 public class GameForm extends JFrame {
+    public GameArea ga;
     public GameForm() {
-        this.add(new GameArea(10));
+        ga = new GameArea(10);
+        this.add(ga);
+        startGame();
     }
-
+    public void startGame(){
+        new GameThread(ga).start();
+    }
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
