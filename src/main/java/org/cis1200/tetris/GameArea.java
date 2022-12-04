@@ -13,7 +13,7 @@ public class GameArea extends JPanel {
     private Block block;
     public GameArea(int inColumns) {
         //location of GameArea on the GameForm
-        this.setBounds(50,50,400,400);
+        this.setBounds(0,0,400,400);
         this.setBackground(Color.lightGray);
 
         columns = inColumns;
@@ -25,10 +25,20 @@ public class GameArea extends JPanel {
 
     public void produceBlock() {
         block = new Block(new int[][] {{1,0},{1,0},{1,1}}, Color.blue);
+        block.startPoint(columns);
     }
 
+    private boolean checkBounds(){
+        if (block.getY() + block.getHeight() == rows) {
+            return false;
+        } else {
+            return true;
+        }
+    }
     public void moveDown() {
-        block.moveDown();
+        if (checkBounds()) {
+            block.moveDown();
+        }
         repaint();
     }
     private void drawBlock(Graphics g){
@@ -57,6 +67,7 @@ public class GameArea extends JPanel {
         //call the paintComponent of the superclass (original method)
         super.paintComponent(g);
         //g.fillRect(50,50,100,100);
+
         drawBlock(g);
     }
 }

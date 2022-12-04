@@ -11,10 +11,12 @@ public class Block {
     public Block(int[][] shape,Color color){
         this.shape = shape;
         this.color = color;
-        x = 2;
-        y = 3;
     }
+    public void startPoint(int gridWidth) {
+        y = -getHeight();
+        x = (gridWidth - getWidth())/2;
 
+    }
     public int[][] getShape(){
         return shape;
     }
@@ -29,8 +31,7 @@ public class Block {
     }
     public int getX() { return x; }
     public int getY() { return y; }
-    public void fall()  {}
-    public void moveDown() {}
-    public void moveLeft() {}
-    public void moveRight() {}
+    public void moveDown() { y++; }
+    public void moveLeft() { x--; }
+    public void moveRight() {x++; }
 }
