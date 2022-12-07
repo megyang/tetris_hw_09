@@ -1,40 +1,43 @@
 package org.cis1200.tetris;
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import javax.swing.*;
 
 public class StartupForm extends JFrame{
+    JButton leaderboardButton = new JButton("leaderboard");
+    JButton startButton = new JButton("start game");
+    JButton quitButton = new JButton("quit game");
+    JButton instructionsButton = new JButton("instructions");
     public StartupForm() {
-        this.setBounds(50, 100, 1000, 1000);
+        this.setLayout(new FlowLayout());//Set layout to be FlowLayout explicitly.
+        this.add(startButton);
+        this.add(leaderboardButton);
+        this.add(quitButton);
+        this.add(instructionsButton);
+        this.setSize(500, 500);
+        this.setVisible(true);
 
-        JButton leaderboard = new JButton("leaderboard");
-        JButton start = new JButton("start game");
-        JButton quit = new JButton("quit game");
-        JButton instructions = new JButton("instructions");
-
-        leaderboard.setBounds(150,200,100,50);
-        start.setBounds(150,300,100,50);
-        quit.setBounds(150,400,100,50);
-        instructions.setBounds(150,500,100,50);
-
-        this.add(start);
-        this.add(leaderboard);
-        this.add(quit);
-        this.add(instructions);
+        startButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                this.setVisible(false);
+                Tetris.start();
+            }
+        });
     }
-    private void btnStartActionPerformed(java.awt.event.ActionEvent e) {
-        this.setVisible(false);
-        Tetris.start();
-    }
+
+
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            public void run()
+            {
                 new GameForm().setVisible(true);
+
             }
         });
 
     }
-
-
 }
