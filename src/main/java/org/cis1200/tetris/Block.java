@@ -1,6 +1,7 @@
 package org.cis1200.tetris;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Block {
     private int[][] shape;
@@ -30,10 +31,13 @@ public class Block {
         }
     }
     public void startPoint(int gridWidth) {
+        //Random r = new Random();
+        //r.nextInt(4);
+
         rotationNum = 0;
         shape = shapes[rotationNum];
 
-        y = -getHeight();
+        y = 1;
         x = (gridWidth - getWidth())/2;
 
     }
@@ -50,10 +54,13 @@ public class Block {
         return shape[0].length;
     }
     public int getX() { return x; }
+    public void setX(int newX) { x = newX; }
+    public void setY(int newY) {y = newY; }
     public int getY() { return y; }
     public void moveDown() { y++; }
     public void moveLeft() { x--; }
     public void moveRight() {x++; }
+    public void moveUp() { y--; }
     public void rotate() {
         rotationNum++;
         if (rotationNum > 3) {

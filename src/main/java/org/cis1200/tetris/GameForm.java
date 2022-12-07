@@ -13,10 +13,19 @@ import java.awt.event.ActionEvent;
 
 public class GameForm extends JFrame {
     public GameArea ga;
+    static JLabel scoreLabel;
+    static JLabel levelLabel;
     public GameForm() {
         ga = new GameArea(10);
         this.add(ga);
 
+        scoreLabel = new JLabel("score: 0");
+        levelLabel = new JLabel("level: 1");
+        JPanel p = new JPanel();
+        p.add(scoreLabel);
+        p.add(levelLabel);
+
+        ga.add(p);
         controls();
         startGame();
     }
@@ -74,8 +83,15 @@ public class GameForm extends JFrame {
         });
 
     }
-    public void startGame(){ new GameThread(ga).start(); }
+    public void startGame(){ new GameThread(ga, this).start(); }
+    public void updateScore(int score) {
+        scoreLabel.setText("score: " + score);
+    }
+    public void updateLevel(int level) {
+        levelLabel.setText("level: " + level);
+    }
     public static void main(String args[]) {
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new GameForm().setVisible(true);

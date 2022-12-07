@@ -1,7 +1,10 @@
 package org.cis1200.tetris;
 
+import org.cis1200.tetrisblocks.*;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 //draw on JFrame
 //override paintComponent method from JPanel
@@ -12,9 +15,10 @@ public class GameArea extends JPanel {
     private Color[][] fallenBlocks;
 
     private Block block;
+    private Block[] blocks;
     public GameArea(int inColumns) {
         //location of GameArea on the GameForm
-        this.setBounds(0,0,400,400);
+        this.setBounds(0,0,400,800);
         this.setBackground(Color.lightGray);
 
         columns = inColumns;
@@ -22,10 +26,19 @@ public class GameArea extends JPanel {
         rows = this.getBounds().height/cellSize;
 
         fallenBlocks = new Color[rows][columns];
+
+        blocks = new Block[]{ new IShape(),
+                                new JShape(),
+                                new LShape(),
+                                new OShape(),
+                                new SShape(),
+                                new TShape(),
+                                new ZShape()};
     }
 
     public void produceBlock() {
-        block = new Block(new int[][] {{1,0},{1,0},{1,1}}, Color.blue);
+        Random r = new Random();
+        block = blocks[r.nextInt(blocks.length)];
         block.startPoint(columns);
     }
 
@@ -164,6 +177,71 @@ public class GameArea extends JPanel {
             return;
         }
         block.rotate();
+        if(block.getX()<0) {
+            block.setX(0);
+        } else if (block.getX() + block.getWidth() >= columns) {
+            block.setX(columns - block.getWidth());
+        } else if (block.getY() + block.getHeight() >= rows)
+            block.setY(rows - block.getHeight());
+
+        int[][] shape = block.getShape();
+        int w = block.getWidth();
+        int h = block.getHeight();
+
+
+        //left bound
+        for(int row = 0; row < h; row++) {
+            for(int col = 0; col < w; col++) {
+                if (shape[row][col] != 0) {
+                    int x = col + block.getX() - 1;
+                    int y = row + block.getY();
+                    if (y < 0) {
+                        break;
+                    }
+                    if(fallenBlocks[y][x] != null) {
+                        block.moveRight();
+                        block.moveRight();
+                    }
+                    break;
+                }
+            }
+        }
+
+        //right bound
+        for(int row = 0; row < h; row++) {
+            for(int col = w - 1; col >=0 ; col--) {
+                if (shape[row][col] != 0) {
+                    int x = col + block.getX() + 1;
+                    int y = row + block.getY();
+                    if (y < 0) {
+                        break;
+                    }
+                    if(fallenBlocks[y][x] != null) {
+                        block.moveLeft();
+                    }
+                    break;
+                }
+            }
+        }
+
+        //bottom bound
+        for(int col = 0; col < w; col++) {
+            for(int row = h - 1; row >=0; row --) {
+                if (shape[row][col] != 0) {
+                    int x = col + block.getX();
+                    int y = row + block.getY() + 1;
+                    if (y < 0) {
+                        //terminates the loop
+                        break;
+                    }
+                    if(fallenBlocks[y][x] != null) {
+                        block.moveUp();
+                    }
+                    break;
+                }
+            }
+        }
+
         repaint();
     }
     private void drawBlock(Graphics g){
@@ -268,7 +346,12 @@ public class GameArea extends JPanel {
         //call the paintComponent of the superclass (original method)
         super.paintComponent(g);
         g.setColor(Color.black);
-        g.drawRect(0,0,400,400);
+        for (int i = 0; i < 400/cellSize; i++) {
+            for (int j = 0; j < 800/cellSize; j++) {
+                g.drawRect(i*cellSize, j*cellSize, cellSize, cellSize);
+            }
+        }
+        g.drawRect(0,0,400,800);
         drawFallenBlocks(g);
         drawBlock(g);
     }
