@@ -198,7 +198,9 @@ public class GameArea extends JPanel {
                     if (y < 0) {
                         break;
                     }
-                    if(fallenBlocks[y][x] != null) {
+                    if (x < 0) {
+                        block.setX(0);
+                    } else if(fallenBlocks[y][x] != null) {
                         block.moveRight();
                         block.moveRight();
                     }
@@ -218,7 +220,14 @@ public class GameArea extends JPanel {
                     }
                     if(fallenBlocks[y][x] != null) {
                         block.moveLeft();
+                        if (x < 0) {
+                            block.setX(0);
+                        }
+                        if (x > columns) {
+                            block.setX(columns - block.getWidth());
+                        }
                     }
+
                     break;
                 }
             }
