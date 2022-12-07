@@ -29,21 +29,142 @@ public class GameArea extends JPanel {
         block.startPoint(columns);
     }
 
-    private boolean checkBounds(){
+    private boolean checkBottomBounds() {
         if (block.getY() + block.getHeight() == rows) {
             return false;
         } else {
+            int[][] shape = block.getShape();
+            int w = block.getWidth();
+            int h = block.getHeight();
+
+            for(int col = 0; col < w; col++) {
+                for(int row = h - 1; row >=0; row --) {
+                    if (shape[row][col] != 0) {
+                        int x = col + block.getX();
+                        int y = row + block.getY() + 1;
+                        if (y < 0) {
+                            //terminates the loop
+                            break;
+                        }
+                        if(fallenBlocks[y][x] != null) {
+                            return false;
+                        }
+                        break;
+                    }
+                }
+            }
             return true;
         }
     }
+
+    private boolean checkLeftBounds() {
+        if (block.getX()==0) {
+            return false;
+        } else {
+            int[][] shape = block.getShape();
+            int w = block.getWidth();
+            int h = block.getHeight();
+
+            for(int row = 0; row < h; row++) {
+                for(int col = 0; col < w; col++) {
+                    if (shape[row][col] != 0) {
+                        int x = col + block.getX() - 1;
+                        int y = row + block.getY();
+                        if (y < 0) {
+                            //terminates the loop
+                            break;
+                        }
+                        if(fallenBlocks[y][x] != null) {
+                            return false;
+                        }
+                        break;
+                    }
+                }
+            }
+
+            return true;
+        }
+    }
+
+    private boolean checkRightBounds() {
+        if (block.getX() + block.getWidth() == columns) {
+            return false;
+        } else {
+            int[][] shape = block.getShape();
+            int w = block.getWidth();
+            int h = block.getHeight();
+
+            for(int row = 0; row < h; row++) {
+                for(int col = w - 1; col >=0 ; col--) {
+                    if (shape[row][col] != 0) {
+                        int x = col + block.getX() + 1;
+                        int y = row + block.getY();
+                        if (y < 0) {
+                            //terminates the loop
+                            break;
+                        }
+                        if(fallenBlocks[y][x] != null) {
+                            return false;
+                        }
+                        break;
+                    }
+                }
+            }
+            return true;
+        }
+    }
+    public boolean checkBounds() {
+        if (block.getY() < 0) {
+            block = null;
+            return true;
+        } else {
+            return false;
+        }
+    }
     public boolean moveDown() {
-        if (checkBounds() == false) {
-            keepFallenBlocks();
+        if (!checkBottomBounds()) {
             return false;
         }
         block.moveDown();
         repaint();
         return true;
+    }
+
+    public void moveRight() {
+        if (block == null) {
+            return;
+        }
+        if (checkRightBounds()) {
+            block.moveRight();
+            repaint();
+        }
+    }
+
+    public void moveLeft() {
+        if (block == null) {
+            return;
+        }
+        if (checkLeftBounds()) {
+            block.moveLeft();
+            repaint();
+        }
+    }
+
+    public void drop() {
+        if (block == null) {
+            return;
+        }
+        while(checkBottomBounds()){
+            block.moveDown();
+        }
+    }
+
+    public void rotate() {
+        if (block == null) {
+            return;
+        }
+        block.rotate();
+        repaint();
     }
     private void drawBlock(Graphics g){
         int blockHeight = block.getHeight();
@@ -63,7 +184,43 @@ public class GameArea extends JPanel {
         }
     }
 
-    private void keepFallenBlocks() {
+    public int clearLines() {
+        boolean lineFilled;
+        int linesCleared = 0;
+        for (int row = rows - 1; row >= 0; row--) {
+            lineFilled = true;
+            for (int col = 0; col < columns; col++) {
+                if (fallenBlocks[row][col] == null) {
+                    lineFilled = false;
+                    break;
+                }
+            }
+            if (lineFilled) {
+                linesCleared++;
+                clearLine(row);
+                shiftDown(row);
+                row++;
+                clearLine(0);
+                repaint();
+            }
+        }
+        return linesCleared;
+    }
+
+    private void clearLine(int row) {
+        for (int i = 0; i < columns; i++) {
+            fallenBlocks[row][i] = null;
+        }
+    }
+
+    private void shiftDown(int row) {
+        for (int r = row; r > 0; r--) {
+            for (int c = 0; c < columns; c++) {
+                fallenBlocks[r][c] = fallenBlocks[r-1][c];
+            }
+        }
+    }
+    public void keepFallenBlocks() {
         int[][] shape = block.getShape();
         int h = block.getHeight();
         int w = block.getWidth();

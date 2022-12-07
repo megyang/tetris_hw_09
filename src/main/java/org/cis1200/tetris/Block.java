@@ -7,12 +7,32 @@ public class Block {
     private Color color;
     private int x;
     private int y;
+    private int[][][] shapes;
+    private int rotationNum;
 
     public Block(int[][] shape,Color color){
         this.shape = shape;
         this.color = color;
+        diffShapes();
+    }
+    private void diffShapes() {
+        shapes = new int[4][][];
+        for (int i = 0; i < 4; i++) {
+            int rows = shape[0].length;
+            int cols = shape.length;
+            shapes[i] = new int[rows][cols];
+            for (int y = 0; y < rows; y++) {
+                for (int x = 0; x < cols; x ++) {
+                    shapes[i][y][x] = shape[cols - x - 1][y];
+                }
+            }
+            shape = shapes[i];
+        }
     }
     public void startPoint(int gridWidth) {
+        rotationNum = 0;
+        shape = shapes[rotationNum];
+
         y = -getHeight();
         x = (gridWidth - getWidth())/2;
 
@@ -34,4 +54,11 @@ public class Block {
     public void moveDown() { y++; }
     public void moveLeft() { x--; }
     public void moveRight() {x++; }
+    public void rotate() {
+        rotationNum++;
+        if (rotationNum > 3) {
+            rotationNum = 0;
+        }
+        shape = shapes[rotationNum];
+    }
 }

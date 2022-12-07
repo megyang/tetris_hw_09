@@ -17,7 +17,13 @@ public class GameThread extends Thread {
                     throw new RuntimeException(e);
                 }
             }
-
+            if (ga.checkBounds()) {
+                System.out.println("Game Over");
+                break;
+            } else {
+                ga.keepFallenBlocks();
+                ga.clearLines();
+            }
         }
     }
 }
