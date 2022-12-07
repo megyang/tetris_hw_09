@@ -10,6 +10,14 @@ public class Tetris {
         gf.startGame();
     }
     public static void main(String[] args) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                gf = new GameForm();
+                sf = new StartupForm();
+                lf = new LeaderboardForm();
 
+                sf.setVisible(true);
+            }
+        });
     }
 }

@@ -27,7 +27,7 @@ public class GameForm extends JFrame {
 
         ga.add(p);
         controls();
-        startGame();
+        //startGame();
     }
     private void controls() {
         //add keystrokes; keyboard action ex: key press
