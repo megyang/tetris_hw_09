@@ -18,20 +18,20 @@ public class GameArea extends JPanel {
     private Block[] blocks;
     public GameArea(int inColumns) {
         //location of GameArea on the GameForm
+        blocks = new Block[]{ new IShape(),
+                new JShape(),
+                new LShape(),
+                new OShape(),
+                new SShape(),
+                new TShape(),
+                new ZShape()};
+
         this.setBounds(0,0,400,800);
         this.setBackground(Color.lightGray);
 
         columns = inColumns;
         cellSize = this.getBounds().width/columns;
         rows = this.getBounds().height/cellSize;
-
-        blocks = new Block[]{ new IShape(),
-                                new JShape(),
-                                new LShape(),
-                                new OShape(),
-                                new SShape(),
-                                new TShape(),
-                                new ZShape()};
     }
 
     public void resetBlocks() {
@@ -61,9 +61,7 @@ public class GameArea extends JPanel {
                             //terminates the loop
                             break;
                         }
-                        if (y > rows - h) {
-                            return false;
-                        } else if(fallenBlocks[y][x] != null) {
+                        if(y < fallenBlocks.length && fallenBlocks[y][x] != null) {
                             return false;
                         }
                         break;
@@ -91,9 +89,7 @@ public class GameArea extends JPanel {
                             //terminates the loop
                             break;
                         }
-                        if (x < 0) {
-                            return false;
-                        } else if(fallenBlocks[y][x] != null) {
+                        if(x > 0 && fallenBlocks[y][x] != null) {
                             return false;
                         }
                         break;
@@ -122,9 +118,7 @@ public class GameArea extends JPanel {
                             //terminates the loop
                             break;
                         }
-                        if (x >= columns) {
-                            return false;
-                        } else if(fallenBlocks[y][x] != null) {
+                        if(x < fallenBlocks[y].length && fallenBlocks[y][x] != null) {
                             return false;
                         }
                         break;
@@ -208,7 +202,7 @@ public class GameArea extends JPanel {
                     }
                     if (x < 0) {
                         block.setX(0);
-                    } else if(fallenBlocks[y][x] != null) {
+                    } else if(x >= 0 && fallenBlocks[y][x] != null) {
                         block.moveRight();
                         block.moveRight();
                     }
@@ -228,7 +222,7 @@ public class GameArea extends JPanel {
                     }
                     if (x >= columns) {
                         block.setX(columns - block.getWidth());
-                    } else if(fallenBlocks[y][x] != null) {
+                    } else if(x < fallenBlocks[y].length && fallenBlocks[y][x] != null) {
                         block.moveLeft();
 
                     }
@@ -248,9 +242,8 @@ public class GameArea extends JPanel {
                         //terminates the loop
                         break;
                     }
-                    if (y > rows - h) {
-                        block.setY(rows - h);
-                    } else if(fallenBlocks[y][x] != null) {
+
+                    if(y > fallenBlocks.length && fallenBlocks[y][x] != null) {
                         block.moveUp();
                     }
                     break;
@@ -369,6 +362,8 @@ public class GameArea extends JPanel {
         }
         g.drawRect(0,0,400,800);
         drawFallenBlocks(g);
-        drawBlock(g);
+        if (block != null) {
+            drawBlock(g);
+        }
     }
 }
