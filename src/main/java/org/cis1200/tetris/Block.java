@@ -37,7 +37,7 @@ public class Block {
         rotationNum = 0;
         shape = shapes[rotationNum];
 
-        y = 1;
+        y = -getHeight();
         x = (gridWidth - getWidth())/2;
 
     }
