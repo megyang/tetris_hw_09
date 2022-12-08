@@ -18,6 +18,8 @@ public class GameForm extends JFrame {
     public GameForm() {
         ga = new GameArea(10);
         this.add(ga);
+        this.setTitle("Game Form");
+        this.setSize(410,850);
 
         scoreLabel = new JLabel("score: 0");
         levelLabel = new JLabel("level: 1");
@@ -27,7 +29,7 @@ public class GameForm extends JFrame {
 
         ga.add(p);
         controls();
-        startGame();
+        //startGame();
     }
     private void controls() {
         //add keystrokes; keyboard action ex: key press
