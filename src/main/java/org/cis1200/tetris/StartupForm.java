@@ -22,8 +22,22 @@ public class StartupForm extends JFrame{
 
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                this.setVisible(false);
+                //this.setVisible(false);
                 Tetris.start();
+            }
+        });
+
+        leaderboardButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                //this.setVisible(false);
+                Tetris.showLeaderboard();
+            }
+        });
+
+        quitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                //this.setVisible(false);
+                System.exit(0);
             }
         });
     }

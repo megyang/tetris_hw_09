@@ -25,8 +25,6 @@ public class GameArea extends JPanel {
         cellSize = this.getBounds().width/columns;
         rows = this.getBounds().height/cellSize;
 
-        fallenBlocks = new Color[rows][columns];
-
         blocks = new Block[]{ new IShape(),
                                 new JShape(),
                                 new LShape(),
@@ -34,6 +32,10 @@ public class GameArea extends JPanel {
                                 new SShape(),
                                 new TShape(),
                                 new ZShape()};
+    }
+
+    public void resetBlocks() {
+        fallenBlocks = new Color[rows][columns];
     }
 
     public void produceBlock() {
@@ -218,14 +220,11 @@ public class GameArea extends JPanel {
                     if (y < 0) {
                         break;
                     }
-                    if(fallenBlocks[y][x] != null) {
+                    if (x >= columns) {
+                        block.setX(columns - block.getWidth());
+                    } else if(fallenBlocks[y][x] != null) {
                         block.moveLeft();
-                        if (x < 0) {
-                            block.setX(0);
-                        }
-                        if (x > columns) {
-                            block.setX(columns - block.getWidth());
-                        }
+
                     }
 
                     break;
