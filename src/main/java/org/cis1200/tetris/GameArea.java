@@ -61,7 +61,9 @@ public class GameArea extends JPanel {
                             //terminates the loop
                             break;
                         }
-                        if(fallenBlocks[y][x] != null) {
+                        if (y > rows - h) {
+                            return false;
+                        } else if(fallenBlocks[y][x] != null) {
                             return false;
                         }
                         break;
@@ -89,7 +91,9 @@ public class GameArea extends JPanel {
                             //terminates the loop
                             break;
                         }
-                        if(fallenBlocks[y][x] != null) {
+                        if (x < 0) {
+                            return false;
+                        } else if(fallenBlocks[y][x] != null) {
                             return false;
                         }
                         break;
@@ -118,7 +122,9 @@ public class GameArea extends JPanel {
                             //terminates the loop
                             break;
                         }
-                        if(fallenBlocks[y][x] != null) {
+                        if (x >= columns) {
+                            return false;
+                        } else if(fallenBlocks[y][x] != null) {
                             return false;
                         }
                         break;
@@ -242,7 +248,9 @@ public class GameArea extends JPanel {
                         //terminates the loop
                         break;
                     }
-                    if(fallenBlocks[y][x] != null) {
+                    if (y > rows - h) {
+                        block.setY(rows - h);
+                    } else if(fallenBlocks[y][x] != null) {
                         block.moveUp();
                     }
                     break;
