@@ -16,8 +16,11 @@ public class Tetris {
         sf.setVisible(true);
     }
 
-    public static void gameOver() {
-        JOptionPane.showInputDialog("game over!\n please enter your name: ");
+    public static void gameOver(int score) {
+
+        String userName = JOptionPane.showInputDialog("game over!\n please enter your name: ");
+        gf.setVisible(false);
+        lf.addPlayer(userName, score);
     }
     public static void showLeaderboard() {
         lf.setVisible(true);
