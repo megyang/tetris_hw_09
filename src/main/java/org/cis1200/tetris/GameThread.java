@@ -29,7 +29,7 @@ public class GameThread extends Thread {
                 }
             }
             if (ga.checkBounds()) {
-                Tetris.gameOver();
+                Tetris.gameOver(score);
                 break;
             } else {
                 ga.keepFallenBlocks();
