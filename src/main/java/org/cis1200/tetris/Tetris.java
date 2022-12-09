@@ -1,5 +1,7 @@
 package org.cis1200.tetris;
 
+import javax.swing.*;
+
 public class Tetris {
     private static GameForm gf;
     private static StartupForm sf;
@@ -10,20 +12,24 @@ public class Tetris {
         gf.startGame();
     }
 
-    public Tetris() {
-        gf = new GameForm();
-        sf = new StartupForm();
-        lf = new LeaderboardForm();
+    public static void showStart() {
+        sf.setVisible(true);
+    }
+
+    public static void gameOver() {
+        JOptionPane.showInputDialog("game over!\n please enter your name: ");
+    }
+    public static void showLeaderboard() {
+        lf.setVisible(true);
     }
     public static void main(String[] args) {
-
-        Tetris tt=new Tetris();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                gf = new GameForm();
+                sf = new StartupForm();
+                lf = new LeaderboardForm();
 
                 sf.setVisible(true);
-                gf.setVisible(true);
-             //   gf.startGame();
             }
         });
     }
