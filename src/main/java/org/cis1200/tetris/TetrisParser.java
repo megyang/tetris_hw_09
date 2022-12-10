@@ -53,23 +53,30 @@ public class TetrisParser {
      * String.
      */
     private static final String BAD_WORD_REGEX = ".*[\\W&&[^']].*";
-    private static final String NUM_WORDS = "^\\d+?";
-    static String replacePunctuation(String cell) {
-            cell = cell.replace(';', ',');
-        return cell;
-    }
+    private static final String NUM_WORDS = "^\\d+?\\;\\d+?\\;\\d+?";
     static List<String[]> csvDataToFallen(BufferedReader br) {
         String line;
         FileLineIterator flIter = new FileLineIterator(br);
         List<String[]> listOfRows = new LinkedList<>();
-
+/*
         while (flIter.hasNext()) {
             line = flIter.next();
             String trimedline = line.trim();
             String[] col=trimedline.split("\\,");
             listOfRows.add(col);
         }
-
+  */
+        while (flIter.hasNext()) {
+            line = flIter.next();
+            String trimedline = line.trim();
+            String[] col=trimedline.split("\\,");
+            for(int i=0;i<col.length;i++){
+                if(!col[i].equals("null")&&!col[i].matches(NUM_WORDS)) {  //if
+                    col[i]="null";
+                }
+            }
+            listOfRows.add(col);
+        }
         return listOfRows;
     }
 }

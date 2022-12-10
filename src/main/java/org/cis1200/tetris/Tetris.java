@@ -11,14 +11,15 @@ public class Tetris {
     private static GameForm gf;
     private static StartupForm sf;
     private static LeaderboardForm lf;
-    private static String PATH_TO_FALLEN = "files/fallenblocks.csv";
+    public static final String PATH_TO_FALLEN = "files/fallenblocks.csv";
     private Color[][] fallenblocks;
 
-public Tetris(BufferedReader br) {
-    loadFallenblocks(br);
+public Tetris() {
+    loadFallenblocks();
 }
 
-public Color[][] loadFallenblocks(BufferedReader br) {
+public Color[][] loadFallenblocks() {
+    BufferedReader br = FileLineIterator.fileToReader(PATH_TO_FALLEN);
     List<String[]> fallenList = TetrisParser.csvDataToFallen(br);
     int rownum=fallenList.size();
     int colnum=fallenList.get(0).length;
@@ -27,18 +28,21 @@ public Color[][] loadFallenblocks(BufferedReader br) {
     for (String[] line:fallenList) {
         j=0;
         for (String s : line) {
-            String[] colors=s.split(";");
-            int r=Integer.parseInt(colors[0]);
-            int g=Integer.parseInt(colors[1]);
-            int b=Integer.parseInt(colors[2]);
-            fallenblocks[i][j]=new Color(r,g,b);
+            if(s.equals("null")){
+                fallenblocks[i][j] = null;
+            } else {
+                String[] colors = s.split(";");
+                int r = Integer.parseInt(colors[0]);
+                int g = Integer.parseInt(colors[1]);
+                int b = Integer.parseInt(colors[2]);
+                fallenblocks[i][j] = new Color(r, g, b);
+            }
             j++;
         }
         i++;
     }
     int a = fallenblocks.length;
     return fallenblocks;
-
 }
     public static void start() {
         gf.setVisible(true);
@@ -62,8 +66,7 @@ public Color[][] loadFallenblocks(BufferedReader br) {
         lf.setVisible(true);
     }
     public static void main(String[] args) {
-        BufferedReader br = FileLineIterator.fileToReader(PATH_TO_FALLEN);
-        Tetris tt=new Tetris(br);
+        Tetris tt=new Tetris();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 gf = new GameForm();
@@ -71,6 +74,7 @@ public Color[][] loadFallenblocks(BufferedReader br) {
                 lf = new LeaderboardForm();
 
                 sf.setVisible(true);
+                gf.setVisible(true);
             }
         });
     }
