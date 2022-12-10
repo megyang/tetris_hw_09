@@ -1,17 +1,53 @@
 package org.cis1200.tetris;
 
+import org.cis1200.FileLineIterator;
+
 import javax.swing.*;
+import java.awt.*;
+import java.io.BufferedReader;
+import java.util.List;
 
 public class Tetris {
     private static GameForm gf;
     private static StartupForm sf;
     private static LeaderboardForm lf;
+    private static String PATH_TO_FALLEN = "files/fallenblocks.csv";
+    private Color[][] fallenblocks;
 
+public Tetris(BufferedReader br) {
+    loadFallenblocks(br);
+}
+
+public Color[][] loadFallenblocks(BufferedReader br) {
+    List<String[]> fallenList = TetrisParser.csvDataToFallen(br);
+    int rownum=fallenList.size();
+    int colnum=fallenList.get(0).length;
+    fallenblocks = new Color[rownum][colnum];
+    int i=0,j=0;
+    for (String[] line:fallenList) {
+        j=0;
+        for (String s : line) {
+            String[] colors=s.split(";");
+            int r=Integer.parseInt(colors[0]);
+            int g=Integer.parseInt(colors[1]);
+            int b=Integer.parseInt(colors[2]);
+            fallenblocks[i][j]=new Color(r,g,b);
+            j++;
+        }
+        i++;
+    }
+    int a = fallenblocks.length;
+    return fallenblocks;
+
+}
     public static void start() {
         gf.setVisible(true);
         gf.startGame();
     }
 
+    public Color[][] getFallenblocks(){
+        return fallenblocks;
+    }
     public static void showStart() {
         sf.setVisible(true);
     }
@@ -26,6 +62,8 @@ public class Tetris {
         lf.setVisible(true);
     }
     public static void main(String[] args) {
+        BufferedReader br = FileLineIterator.fileToReader(PATH_TO_FALLEN);
+        Tetris tt=new Tetris(br);
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 gf = new GameForm();
