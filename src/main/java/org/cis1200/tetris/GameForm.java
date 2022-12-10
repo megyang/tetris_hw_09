@@ -14,15 +14,23 @@ import java.io.*;
 //overriding is giving a method a different body
 
 public class GameForm extends JFrame {
+    private boolean loadedgame=false;
     public GameArea ga;
+    public QueueArea qa;
     private GameThread gt;
     static JLabel scoreLabel;
     static JLabel levelLabel;
     JButton mainMenuButton = new JButton("main menu");
-    JButton pauseButton = new JButton("pause");
+    JButton pauseButton = new JButton("Pause");
+    JButton resumeButton = new JButton("Resume");
+    JButton saveButton = new JButton("Save");
+    JButton loadButton = new JButton("Load");
+    JButton newBlockButton = new JButton("New Block");
     public GameForm() {
         ga = new GameArea(10);
+        qa = new QueueArea(ga);
         this.add(ga);
+        this.add(qa);
         this.setTitle("Game Form");
         this.setSize(410,850);
 
@@ -32,7 +40,11 @@ public class GameForm extends JFrame {
         p.add(scoreLabel);
         p.add(levelLabel);
         p.add(mainMenuButton);
-        p.add(pauseButton);
+        //p.add(pauseButton);
+        //p.add(resumeButton);
+        p.add(saveButton);
+        p.add(loadButton);
+        p.add(newBlockButton);
 
         mainMenuButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -47,10 +59,46 @@ public class GameForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 //this.setVisible(false);
                 gt.interrupt();
+
+            }
+        });
+        pauseButton.setFocusable(false);
+        resumeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(gt.isInterrupted()) {
+                    gt.interrupt();
+                }
+                gt.start();
+            }
+        });
+        resumeButton.setFocusable(false);
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 ga.saveFallenBlocks();
                 ga.saveFallingBlock();
             }
         });
+        saveButton.setFocusable(false);
+
+        loadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ga.loadFallenblocks();
+                loadedgame=true;
+
+            }
+        });
+        loadButton.setFocusable(false);
+
+        newBlockButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                qa.paintQueue();
+            }
+        });
+        newBlockButton.setFocusable(false);
 
         ga.add(p);
         controls();
@@ -111,7 +159,11 @@ public class GameForm extends JFrame {
 
     }
     public void startGame(){
-        ga.resetBlocks();
+        if(!loadedgame) {
+            ga.resetBlocks(); //reset if game not loaded from saved file
+        } else {
+            loadedgame=false; //if loaded from file, continue and reset flag
+        }
         gt = new GameThread(ga, this);
         gt.start();
     }

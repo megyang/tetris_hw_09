@@ -1,15 +1,18 @@
 package org.cis1200.tetris;
 
 import com.google.gson.reflect.TypeToken;
+import org.cis1200.FileLineIterator;
 import org.cis1200.tetrisblocks.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+import java.util.List;
+
 import com.google.gson.*;
+
+import static org.cis1200.tetris.Tetris.PATH_TO_FALLEN;
 
 //draw on JFrame
 //override paintComponent method from JPanel
@@ -21,6 +24,9 @@ public class GameArea extends JPanel {
 
     private Block block;
     private Block[] blocks;
+    private Block queuedBlock;
+    private Queue<Block> blockqueue=new PriorityQueue<>();
+    private boolean getFromQueue=false;
     private String saveFallenBlocksFile = "saveFallenBlocksFile";
 
     public GameArea(int inColumns) {
@@ -46,9 +52,23 @@ public class GameArea extends JPanel {
     }
 
     public void produceBlock() {
-        Random r = new Random();
-        block = blocks[r.nextInt(blocks.length)];
+        if(getFromQueue && blockqueue.size()>0) {
+            block = blockqueue.remove();
+        } else {
+            Random r = new Random();
+            block = blocks[r.nextInt(blocks.length)];
+        }
         block.startPoint(columns);
+    }
+
+    public void addBlockToQueue() {
+        Random r = new Random();
+        queuedBlock = blocks[r.nextInt(blocks.length)];
+        blockqueue.add(queuedBlock);
+    }
+
+    public Queue<Block> getBlockqueue() {
+        return blockqueue;
     }
 
     private boolean checkBottomBounds() {
@@ -333,6 +353,9 @@ public class GameArea extends JPanel {
 
     private void drawFallenBlocks (Graphics g) {
         Color color;
+        if(fallenBlocks==null) {
+            return;
+        }
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j ++) {
                 color = fallenBlocks[i][j];
@@ -352,7 +375,6 @@ public class GameArea extends JPanel {
         BufferedWriter bw;
         FileWriter fw;
         String color;
-        //builder.append("{{");
         for(int i = 0; i < fallenBlocks.length; i++) {
             for (int j = 0; j < fallenBlocks[i].length; j++) {
                 if (fallenBlocks[i][j] != null) {
@@ -362,28 +384,18 @@ public class GameArea extends JPanel {
                     color = String.valueOf(r) + ";" + String.valueOf(g) + ";" + String.valueOf(b);
                     builder.append(color);
                 } else {
-                    builder.append("204;204;204");
+                    builder.append("null");
                 }
                 if(j < fallenBlocks[i].length - 1)//if this is not the last row element
                     builder.append(",");//then add comma (if you don't like commas you can use spaces)
             }
-            //builder.append("}");
             if(i<fallenBlocks.length-1) {
                 builder.append("\n");
             }
         }
-        //builder.append("}");
-/*
-        //Gson gson = new GsonBuilder().serializeNulls().create();
-        String json = "{204,200,100}";
 
-        Gson gson = new Gson();
-        Map<String, Integer>[] data = gson.fromJson(json, new TypeToken<Map<String, Integer>[]>() {}.getType());
-        int r = data[0].get("r");
-        System.out.println("******"+r);
-*/
         try {
-            fw = new FileWriter("files/fallenblocks.csv",false);
+            fw = new FileWriter(PATH_TO_FALLEN,false);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -402,7 +414,29 @@ public class GameArea extends JPanel {
         }
 
     }
-
+    public void loadFallenblocks() {
+        BufferedReader br = FileLineIterator.fileToReader(PATH_TO_FALLEN);
+        List<String[]> fallenList = TetrisParser.csvDataToFallen(br);
+        resetBlocks();
+        int i=0,j=0;
+        for (String[] line:fallenList) {
+            j=0;
+            for (String s : line) {
+                if(s.equals("null")){
+                    fallenBlocks[i][j] = null;
+                } else {
+                    String[] colors = s.split(";");
+                    int r = Integer.parseInt(colors[0]);
+                    int g = Integer.parseInt(colors[1]);
+                    int b = Integer.parseInt(colors[2]);
+                    fallenBlocks[i][j] = new Color(r, g, b);
+                }
+                j++;
+            }
+            i++;
+        }
+        repaint();
+    }
     public void saveFallingBlock() {
         StringBuilder builder = new StringBuilder();
         BufferedWriter bw;

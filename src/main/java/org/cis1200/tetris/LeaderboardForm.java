@@ -24,6 +24,7 @@ public class LeaderboardForm extends JFrame {
 
         myPanel.setVisible(true);
         this.setLayout(new FlowLayout());
+        this.setSize(500,250);
         this.add(mainMenuButton);
         this.add(myPanel);
         myPanel.add(new JScrollPane(leaderBoard));
