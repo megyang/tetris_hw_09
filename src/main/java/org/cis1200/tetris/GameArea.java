@@ -4,6 +4,7 @@ import org.cis1200.tetrisblocks.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
 import java.util.Random;
 
 //draw on JFrame
@@ -13,9 +14,10 @@ public class GameArea extends JPanel {
     private int columns;
     private int cellSize;
     private Color[][] fallenBlocks;
-
     private Block block;
     private Block[] blocks;
+    private String saveFallenBlocksFile = "saveFallenBlocksFile";
+
     public GameArea(int inColumns) {
         //location of GameArea on the GameForm
         blocks = new Block[]{ new IShape(),
@@ -342,12 +344,107 @@ public class GameArea extends JPanel {
         }
     }
 
+    public void saveFallenBlocks() {
+        StringBuilder builder = new StringBuilder();
+        BufferedWriter bw;
+        FileWriter fw;
+        String color;
+        for(int i = 0; i < fallenBlocks.length; i++) {
+            for (int j = 0; j < fallenBlocks[i].length; j++) {
+                if (fallenBlocks[i][j] != null) {
+                    int r = fallenBlocks[i][j].getRed();
+                    int g = fallenBlocks[i][j].getGreen();
+                    int b = fallenBlocks[i][j].getBlue();
+                    color = "{" + String.valueOf(r) + "," + String.valueOf(g) + "," + String.valueOf(b) + "}";
+                    builder.append(color);
+                } else {
+                    builder.append("{204, 204, 204}");
+                }
+                if(j < fallenBlocks.length - 1)//if this is not the last row element
+                    builder.append(",");//then add comma (if you don't like commas you can use spaces)
+            }
+            builder.append("\n");
+        }
+
+        try {
+            fw = new FileWriter("files/fallenblocks.csv",false);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        bw = new BufferedWriter(fw);
+        try {
+            bw.write(builder.toString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            bw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public void saveFallingBlock() {
+        StringBuilder builder = new StringBuilder();
+        BufferedWriter bw;
+        FileWriter fw;
+
+        Color c = block.getColor();
+        int x = block.getX();
+        int y = block.getY();
+        int[][] shape = new int[][]{{1, 1, 1, 1}};
+        int[][] ishape = new int[][]{{1, 1, 1, 1}}
+        //int[][] shape = block.getShape();
+        String shapeName = "no shape";
+        if (shape.equals(ishape)) {
+            shapeName = "{{1, 1, 1, 1}}";
+        } else if (shape == new int[][]{{0,1},{0,1},{1,1}}) {
+            shapeName = "{{0,1},{0,1},{1,1}}";
+        } else if (shape == new int[][]{{1,0},{1,0},{1,1}}) {
+            shapeName = "{{1,0},{1,0},{1,1}}";
+        } else if (shape == new int[][]{{1,1},{1,1}}) {
+            shapeName = "{{1,1},{1,1}}";
+        } else if (shape == new int[][]{{0,1,1},{1,1,0}}) {
+            shapeName = "{{0,1,1},{1,1,0}}";
+        } else if (shape == new int[][]{{1,1,1},{0,1,0}}) {
+            shapeName = "{{1,1,1},{0,1,0}}";
+        } else if (shape == new int[][]{{1,1,0},{0,1,1}}) {
+            shapeName = "{{1,1,0},{0,1,1}}";
+        }
+
+        builder.append(c + ",");
+        builder.append(x + ",");
+        builder.append(y + ",");
+        builder.append(shapeName);
+
+        try {
+            fw = new FileWriter("files/fallingblocks.csv",false);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        bw = new BufferedWriter(fw);
+        try {
+            bw.write(builder.toString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            bw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     private void drawOneGrid(Graphics g, int x, int y, Color blockColor){
         g.setColor(blockColor);
         g.fillRect(x,y, cellSize, cellSize);
         g.setColor(Color.black);
         g.drawRect(x,y, cellSize, cellSize);
     }
+
+
     //Graphics g is a painter
     @Override
     protected void paintComponent(Graphics g)

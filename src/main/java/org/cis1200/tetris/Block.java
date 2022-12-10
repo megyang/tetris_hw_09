@@ -54,6 +54,7 @@ public class Block {
         return shape[0].length;
     }
     public int getX() { return x; }
+    public int getRotationNum() { return rotationNum; }
     public void setX(int newX) { x = newX; }
     public void setY(int newY) {y = newY; }
     public int getY() { return y; }

@@ -3,6 +3,7 @@ package org.cis1200.tetris;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 
 //JFrame is class inside swing package (javax.swing.JFrame)
 //a class extends another class
@@ -18,6 +19,7 @@ public class GameForm extends JFrame {
     static JLabel scoreLabel;
     static JLabel levelLabel;
     JButton mainMenuButton = new JButton("main menu");
+    JButton pauseButton = new JButton("pause");
     public GameForm() {
         ga = new GameArea(10);
         this.add(ga);
@@ -28,6 +30,7 @@ public class GameForm extends JFrame {
         p.add(scoreLabel);
         p.add(levelLabel);
         p.add(mainMenuButton);
+        p.add(pauseButton);
 
         mainMenuButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -37,6 +40,15 @@ public class GameForm extends JFrame {
             }
         });
         mainMenuButton.setFocusable(false);
+
+        pauseButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                //this.setVisible(false);
+                gt.interrupt();
+                ga.saveFallenBlocks();
+                ga.saveFallingBlock();
+            }
+        });
 
         ga.add(p);
         controls();
