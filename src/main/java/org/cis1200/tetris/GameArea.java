@@ -25,7 +25,7 @@ public class GameArea extends JPanel {
     private Block block;
     private Block[] blocks;
     private Block queuedBlock;
-    private Queue<Block> blockqueue=new PriorityQueue<>();
+    private LinkedList<Block> blockqueue=new LinkedList<>();
     private boolean getFromQueue=false;
     private String saveFallenBlocksFile = "saveFallenBlocksFile";
 
@@ -52,19 +52,39 @@ public class GameArea extends JPanel {
     }
 
     public void produceBlock() {
-        if(getFromQueue && blockqueue.size()>0) {
+        if(blockqueue.size()>0) {
             block = blockqueue.remove();
+            System.out.println("Queue size="+blockqueue.size()+"\n");
+
         } else {
             Random r = new Random();
             block = blocks[r.nextInt(blocks.length)];
+            System.out.println("Generated\n");
         }
         block.startPoint(columns);
     }
 
     public void addBlockToQueue() {
         Random r = new Random();
-        queuedBlock = blocks[r.nextInt(blocks.length)];
-        blockqueue.add(queuedBlock);
+        Block tmpblock = blocks[r.nextInt(blocks.length)];
+        Block newblock = null;
+        if ( tmpblock instanceof IShape) {
+            newblock = new IShape();
+        } else if (tmpblock instanceof JShape) {
+            newblock = new JShape();
+        } else if (tmpblock instanceof LShape) {
+            newblock = new LShape();
+        } else if (tmpblock instanceof OShape) {
+            newblock = new OShape();
+        } else if (tmpblock instanceof SShape) {
+            newblock = new SShape();
+        } else if (tmpblock instanceof TShape) {
+            newblock = new TShape();
+        } else if (tmpblock instanceof ZShape) {
+            newblock = new ZShape();
+        }
+
+        blockqueue.add(newblock);
     }
 
     public Queue<Block> getBlockqueue() {

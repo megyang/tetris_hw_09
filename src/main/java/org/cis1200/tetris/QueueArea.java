@@ -2,11 +2,12 @@ package org.cis1200.tetris;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Iterator;
 import java.util.Queue;
 
 public class QueueArea extends JPanel {
-    private int rows=4;
-    private int columns=4;
+    private int rows=6;
+    private int columns=6;
     private int cellSize=20;
     private Block queuedBlock;
     private Queue<Block> blockqueue;
@@ -20,32 +21,43 @@ public class QueueArea extends JPanel {
         this.setBounds(410,0,400,400);
         //this.setBackground(Color.GREEN);
 
-        cellSize = this.getBounds().width/columns;
         this.x= this.getBounds().x;
         this.y= this.getBounds().y;
         rows = this.getBounds().height/cellSize;
-        ga.addBlockToQueue();
-        blockqueue = ga.getBlockqueue();
-        queuedBlock = blockqueue.peek();
+        //ga.addBlockToQueue();
+        //blockqueue = ga.getBlockqueue();
+        //queuedBlock = blockqueue.peek();
         repaint();
     }
     public void paintQueue () {
         ga.addBlockToQueue();
         blockqueue = ga.getBlockqueue();
-        queuedBlock = blockqueue.peek();
         repaint();
     }
-    private void drawBlock(Graphics g){
-        int blockHeight = queuedBlock.getHeight();
-        int blockWidth = queuedBlock.getWidth();
-        int[][] blockShape = queuedBlock.getShape();
-        Color blockColor = queuedBlock.getColor();
+    private void drawBlocks(Graphics g) {
+        Block blk=null;
+        int queueSize = blockqueue.size();
+        Iterator<Block> it= blockqueue.iterator();
+        int i = 0;
+        while (it.hasNext()){
+            blk = it.next();
+            if (blk != null)
+                drawBlock(g, blk, i);
+            i++;
+        }
+
+    }
+    private void drawBlock(Graphics g, Block blk, int seq){
+        int blockHeight = blk.getHeight();
+        int blockWidth = blk.getWidth();
+        int[][] blockShape = blk.getShape();
+        Color blockColor = blk.getColor();
 
         for (int i = 0; i < blockHeight; i++) {
             for (int j = 0; j < blockWidth; j++) {
                 if (blockShape[i][j] == 1) {
-                    int x = this.x + (queuedBlock.getX() + j) * cellSize;
-                    int y = this.y + (queuedBlock.getY() + i) * cellSize;
+                    int x = this.x + (blk.getX() + j) * cellSize;
+                    int y = this.y + (blk.getY() + i + seq*4) * cellSize;
 
                     drawOneGrid(g, x, y, blockColor);
                 }
@@ -64,15 +76,9 @@ public class QueueArea extends JPanel {
     {
         //call the paintComponent of the superclass (original method)
         super.paintComponent(g);
-        g.setColor(Color.black);
-        for (int i = 0; i < 100/cellSize; i++) {
-            for (int j = 0; j < 100/cellSize; j++) {
-                g.drawRect(i*cellSize, j*cellSize, cellSize, cellSize);
-            }
-        }
-        g.drawRect(410,0,200,460);
-        if (queuedBlock != null) {
-            drawBlock(g);
+
+        if (blockqueue != null) {
+            drawBlocks(g);
         }
     }
 }

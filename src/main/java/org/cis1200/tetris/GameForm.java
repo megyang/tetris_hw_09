@@ -32,7 +32,7 @@ public class GameForm extends JFrame {
         this.add(ga);
         this.add(qa);
         this.setTitle("Game Form");
-        this.setSize(410,850);
+        this.setSize(610,850);
 
         scoreLabel = new JLabel("score: 0");
         levelLabel = new JLabel("level: 1");
@@ -96,6 +96,7 @@ public class GameForm extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 qa.paintQueue();
+                ga.repaint();
             }
         });
         newBlockButton.setFocusable(false);
