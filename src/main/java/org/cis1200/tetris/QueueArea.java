@@ -15,12 +15,13 @@ public class QueueArea extends JPanel {
 
     public QueueArea(GameArea ga){
         this.ga = ga;
-        this.setBounds(425,0,400,400);
+        this.setBounds(410,0,400,400);
         //this.setBackground(Color.GREEN);
         this.x= this.getBounds().x;
         this.y= this.getBounds().y;
     }
 
+    //retrieve queue from game area
     public void retrieveQueue() {
         blockqueue = ga.getBlockqueue();
     }
@@ -46,7 +47,7 @@ public class QueueArea extends JPanel {
         for (int i = 0; i < blockHeight; i++) {
             for (int j = 0; j < blockWidth; j++) {
                 if (blockShape[i][j] == 1) {
-                    int x = this.x + (blk.getX() + j) * cellSize;
+                    int x = this.x +40 + (blk.getX() + j) * cellSize;
                     int y = this.y + (blk.getY() + i + seq*4) * cellSize;
 
                     drawOneGrid(g, x, y, blockColor);
@@ -66,7 +67,8 @@ public class QueueArea extends JPanel {
     {
         //call the paintComponent of the superclass (original method)
         super.paintComponent(g);
-
+        g.drawRect(x,0,160,800);
+        retrieveQueue();
         if (blockqueue != null) {
             drawBlocks(g);
         }

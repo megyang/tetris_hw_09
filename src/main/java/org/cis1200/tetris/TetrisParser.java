@@ -27,32 +27,19 @@ public class TetrisParser {
     /**
      * Regular Expressions
      * <p>
-     * For the purposes of this project, we consider "word characters" to be
-     * alphanumeric characters [a-zA-Z0-9] and apostrophes [']. A word is "bad"
-     * if it contains some other character. (In particular, twitter mentions
-     * like "@user" are "bad".)
-     * <p>
-     * The regular expression BAD_WORD_REGEX expresses those constraints -- any
-     * String that matches it is considered "bad" and will be removed from the
-     * training data.
-     * <p>
-     * The regular expression {@code "[\\W&&[^']]"} matches non-word characters.
+     * The regular expression {@code "^\\d+?\\;\\d+?\\;\\d+?"} matches data fields.
+     * used to store game state
      * The regular expression ".*" matches _any_ sequence of characters. When
      * concatenated into the full regular expression, they match any sequence of
      * characters followed by a non-word character followed again by any
      * sequence of characters, or, any string containing a non-word character.
      * <p>
-     * Similarly, the URL_REGEX matches any substring that starts a word with
-     * "http" and continues until some whitespace occurs. See the removeURLs
-     * static method.
-     * <p>
      * See https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern
      * .html for more details about Java's regular expressions.
      * <p>
-     * tldr: use word.matches(BAD_WORD_REGEX) to determine if word is a bad
+     * tldr: use word.matches(NUM_WORDS) to determine if a field contains proper data
      * String.
      */
-    private static final String BAD_WORD_REGEX = ".*[\\W&&[^']].*";
     private static final String NUM_WORDS = "^\\d+?\\;\\d+?\\;\\d+?";
     static List<String[]> csvDataToFallen(BufferedReader br) {
         String line;

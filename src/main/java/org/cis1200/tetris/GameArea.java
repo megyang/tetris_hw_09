@@ -65,6 +65,11 @@ public class GameArea extends JPanel {
         block.startPoint(columns);
     }
 
+    /*
+     * Cannot add blocks[] content directly to the queue. Each element in the queue must be an
+     * independent instance. For example, you can have the same shape in the queue multiple times.
+     * Each of them must have its own lifecycle
+     */
     public void addBlockToQueue() {
         Random r = new Random();
         Block tmpblock = blocks[r.nextInt(blocks.length)];
@@ -88,8 +93,11 @@ public class GameArea extends JPanel {
         blockqueue.add(newblock);
     }
 
+//Return duplicated LinkedList for proper encapsulation
     public LinkedList<Block> getBlockqueue() {
-        return blockqueue;
+        LinkedList<Block> dupblk = new LinkedList<>();
+        dupblk.addAll(blockqueue);
+        return dupblk;
     }
 
     private boolean checkBottomBounds() {

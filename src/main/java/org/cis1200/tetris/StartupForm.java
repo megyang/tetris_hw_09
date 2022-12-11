@@ -44,16 +44,4 @@ public class StartupForm extends JFrame{
         });
     }
 
-
-    public static void main(String args[]) {
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run()
-            {
-                new GameForm().setVisible(true);
-
-            }
-        });
-
-    }
 }

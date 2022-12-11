@@ -12,45 +12,13 @@ public class Tetris {
     private static StartupForm sf;
     private static LeaderboardForm lf;
     public static final String PATH_TO_FALLEN = "files/fallenblocks.csv";
-    private Color[][] fallenblocks;
 
 public Tetris() {
-    loadFallenblocks();
 }
 
-public Color[][] loadFallenblocks() {
-    BufferedReader br = FileLineIterator.fileToReader(PATH_TO_FALLEN);
-    List<String[]> fallenList = TetrisParser.csvDataToFallen(br);
-    int rownum=fallenList.size();
-    int colnum=fallenList.get(0).length;
-    fallenblocks = new Color[rownum][colnum];
-    int i=0,j=0;
-    for (String[] line:fallenList) {
-        j=0;
-        for (String s : line) {
-            if(s.equals("null")){
-                fallenblocks[i][j] = null;
-            } else {
-                String[] colors = s.split(";");
-                int r = Integer.parseInt(colors[0]);
-                int g = Integer.parseInt(colors[1]);
-                int b = Integer.parseInt(colors[2]);
-                fallenblocks[i][j] = new Color(r, g, b);
-            }
-            j++;
-        }
-        i++;
-    }
-    int a = fallenblocks.length;
-    return fallenblocks;
-}
     public static void start() {
         gf.setVisible(true);
         gf.startGame();
-    }
-
-    public Color[][] getFallenblocks(){
-        return fallenblocks;
     }
     public static void showStart() {
         sf.setVisible(true);

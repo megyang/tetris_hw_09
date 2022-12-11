@@ -31,8 +31,6 @@ public class Block implements Comparable{
         }
     }
     public void startPoint(int gridWidth) {
-        //Random r = new Random();
-        //r.nextInt(4);
 
         rotationNum = 0;
         shape = shapes[rotationNum];
