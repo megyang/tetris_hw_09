@@ -25,7 +25,7 @@ public class GameForm extends JFrame {
     JButton resumeButton = new JButton("Resume");
     JButton saveButton = new JButton("Save");
     JButton loadButton = new JButton("Load");
-    JButton newBlockButton = new JButton("New Block");
+    JButton newBlockButton = new JButton("Queue");
     public GameForm() {
         ga = new GameArea(this, 10);
         qa = new QueueArea(ga);

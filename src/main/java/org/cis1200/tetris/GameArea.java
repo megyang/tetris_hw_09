@@ -10,8 +10,6 @@ import java.io.*;
 import java.util.*;
 import java.util.List;
 
-import com.google.gson.*;
-
 import static org.cis1200.tetris.Tetris.PATH_TO_FALLEN;
 
 //draw on JFrame
@@ -402,9 +400,12 @@ public class GameArea extends JPanel {
 
     public void saveFallenBlocks() {
         StringBuilder builder = new StringBuilder();
-        BufferedWriter bw;
-        FileWriter fw;
+        BufferedWriter bw =null;
+        FileWriter fw =null;
         String color;
+        if(fallenBlocks==null) {
+            return;
+        }
         for(int i = 0; i < fallenBlocks.length; i++) {
             for (int j = 0; j < fallenBlocks[i].length; j++) {
                 if (fallenBlocks[i][j] != null) {
@@ -426,16 +427,11 @@ public class GameArea extends JPanel {
 
         try {
             fw = new FileWriter(PATH_TO_FALLEN,false);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        bw = new BufferedWriter(fw);
-        try {
+            bw = new BufferedWriter(fw);
             bw.write(builder.toString());
-
-            //bw.write(json);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
+            System.out.println("\nCouldn't save to "+PATH_TO_FALLEN+" \nMake sure it is a valid path");
         }
         try {
             bw.close();

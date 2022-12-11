@@ -10,11 +10,12 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import static org.cis1200.tetris.Tetris.LEADERBOARD_PATH;
+import static org.cis1200.tetris.Tetris.PATH_TO_FALLEN;
 
 public class LeaderboardForm extends JFrame {
     String[] cols = new String[] {"name","score"};
     DefaultTableModel defaultModel = new DefaultTableModel(cols, 0);
-    private String leaderBoardFile = "files/leaderboard";
     private TableRowSorter<TableModel> sorter;
     JButton mainMenuButton = new JButton("main menu");
     JPanel myPanel = new JPanel();
@@ -42,12 +43,14 @@ public class LeaderboardForm extends JFrame {
         FileOutputStream fs = null;
         ObjectOutputStream os = null;
         try {
-            fs = new FileOutputStream(leaderBoardFile);
+            fs = new FileOutputStream(LEADERBOARD_PATH);
             os = new ObjectOutputStream(fs);
             os.writeObject(defaultModel.getDataVector());
             os.close();
             fs.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            System.out.println("\nCouldn't save to "+LEADERBOARD_PATH+" \nMake sure it is a valid path");
         }
 
     }
@@ -59,12 +62,13 @@ public class LeaderboardForm extends JFrame {
 
         FileInputStream fs = null;
         try {
-            fs = new FileInputStream(leaderBoardFile);
+            fs = new FileInputStream(LEADERBOARD_PATH);
             ObjectInputStream os = new ObjectInputStream(fs);
             defaultModel.setDataVector( (Vector<Vector>)os.readObject(), colId);
             os.close();
             fs.close();
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 

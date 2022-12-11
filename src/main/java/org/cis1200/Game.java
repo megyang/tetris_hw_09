@@ -11,7 +11,7 @@ public class Game {
     public static void main(String[] args) {
         // Set the game you want to run here
         Runnable game = new org.cis1200.tetris.Tetris();
-
+        //Runnable game = new org.cis1200.mushroom.RunMushroomOfDoom();
         SwingUtilities.invokeLater(game);
     }
 }
