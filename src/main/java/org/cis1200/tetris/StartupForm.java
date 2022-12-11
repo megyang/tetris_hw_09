@@ -11,6 +11,8 @@ public class StartupForm extends JFrame{
     JButton startButton = new JButton("start game");
     JButton quitButton = new JButton("quit game");
     JButton instructionsButton = new JButton("instructions");
+    JPanel instructPanel = new JPanel();
+    StartupForm sf;
     public StartupForm() {
 
         this.setTitle("Startup Form");
@@ -21,7 +23,11 @@ public class StartupForm extends JFrame{
         this.add(instructionsButton);
         this.setSize(500, 500);
         this.setVisible(true);
+        //this.add(instructPanel);
+        sf=this;
+    }
 
+    public void setup() {
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 //this.setVisible(false);
@@ -42,6 +48,31 @@ public class StartupForm extends JFrame{
                 System.exit(0);
             }
         });
+
+        String instruction="<html><b>Here is how to play the game</b><br>" +
+                "<li>asfsafsfdfdsfa<br>"+
+                "<li>asfafasfafsaf<br>" +
+                "<li>asdfaswerwreewre<br>"+
+                "<li>sadfalsjljljljljjllkjsafsafdasfasfdsafsafsfsafsasfsafsfsafsafasfsafd<br>"+
+                "fsafsafsafsafasfasfdasfdsadfasfafsafdasfsafd"+
+                "</html>";
+
+        JLabel instructLable = new JLabel();
+        instructPanel.add(instructLable);
+        sf.add(instructPanel);
+
+        instructionsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                instructLable.setFont(new Font("Arial", Font.ITALIC, 14));
+                instructLable.setForeground(Color.black);
+                instructLable.setHorizontalAlignment(JLabel.LEFT);
+                instructLable.setBackground(Color.CYAN);
+                instructLable.setText(instruction);
+            }
+        });
+
     }
+
 
 }

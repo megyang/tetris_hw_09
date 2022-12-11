@@ -41,6 +41,7 @@ public Tetris() {
                 sf = new StartupForm();
                 lf = new LeaderboardForm();
                 gf.start();
+                sf.setup();
                 sf.setVisible(true);
                 gf.setVisible(true);
             }

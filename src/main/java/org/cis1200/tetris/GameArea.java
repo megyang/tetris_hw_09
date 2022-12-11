@@ -234,6 +234,7 @@ public class GameArea extends JPanel {
         if (block == null) {
             return;
         }
+        //Dynamic dispatching
         block.rotate();
         if(block.getX()<0) {
             block.setX(0);
