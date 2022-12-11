@@ -14,7 +14,7 @@ import javax.swing.table.TableRowSorter;
 public class LeaderboardForm extends JFrame {
     String[] cols = new String[] {"name","score"};
     DefaultTableModel defaultModel = new DefaultTableModel(cols, 0);
-    private String leaderBoardFile = "leaderboard";
+    private String leaderBoardFile = "files/leaderboard.txt";
     private TableRowSorter<TableModel> sorter;
     JButton mainMenuButton = new JButton("main menu");
     JPanel myPanel = new JPanel();

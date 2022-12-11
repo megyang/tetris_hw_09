@@ -51,6 +51,9 @@ public class GameForm extends JFrame {
         p.add(saveButton);
         p.add(loadButton);
         p.add(newBlockButton);
+
+        //Use a timer to repaint GameForm. gf.repaint will repaint all JPanels inside it
+        //GameArea and QueueArea
         new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -106,8 +109,7 @@ public class GameForm extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ga.addBlockToQueue();
-                qa.paintQueue();
-                //qa.repaint();
+                qa.retrieveQueue();
                 gf.repaint();
             }
         });
@@ -185,14 +187,5 @@ public class GameForm extends JFrame {
     }
     public void updateLevel(int level) {
         levelLabel.setText("level: " + level);
-    }
-    public static void main(String args[]) {
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GameForm().setVisible(true);
-            }
-        });
-
     }
 }

@@ -4,13 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Queue;
 
-public class QueueArea extends JPanel implements Runnable {
-    private int rows=6;
-    private int columns=6;
+public class QueueArea extends JPanel {
     private int cellSize=20;
-    private Block queuedBlock;
     private LinkedList<Block> blockqueue;
     private GameArea ga;
     private int x = 400;
@@ -19,22 +15,14 @@ public class QueueArea extends JPanel implements Runnable {
 
     public QueueArea(GameArea ga){
         this.ga = ga;
-        this.setBounds(410,0,400,400);
+        this.setBounds(425,0,400,400);
         //this.setBackground(Color.GREEN);
-
         this.x= this.getBounds().x;
         this.y= this.getBounds().y;
-        rows = this.getBounds().height/cellSize;
-        //ga.addBlockToQueue();
-        //blockqueue = ga.getBlockqueue();
-        //queuedBlock = blockqueue.peek();
-        //repaint();
     }
 
-    public void paintQueue () {
-        //ga.addBlockToQueue();
+    public void retrieveQueue() {
         blockqueue = ga.getBlockqueue();
-        //repaint();
     }
     private void drawBlocks(Graphics g) {
         Block blk=null;
@@ -81,19 +69,6 @@ public class QueueArea extends JPanel implements Runnable {
 
         if (blockqueue != null) {
             drawBlocks(g);
-        }
-    }
-
-    /**
-     * Runs this operation.
-     */
-    @Override
-    public void run() {
-        try {
-            Thread.sleep(1000);
-            repaint();
-        } catch (InterruptedException e) {
-            return;
         }
     }
 }
