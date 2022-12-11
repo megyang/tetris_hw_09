@@ -72,7 +72,7 @@ public Color[][] loadFallenblocks() {
                 gf = new GameForm();
                 sf = new StartupForm();
                 lf = new LeaderboardForm();
-
+                gf.start();
                 sf.setVisible(true);
                 gf.setVisible(true);
             }

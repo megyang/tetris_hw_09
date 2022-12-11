@@ -3,7 +3,6 @@ package org.cis1200.tetris;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
 
 //JFrame is class inside swing package (javax.swing.JFrame)
 //a class extends another class
@@ -18,6 +17,7 @@ public class GameForm extends JFrame {
     public GameArea ga;
     public QueueArea qa;
     private GameThread gt;
+    private GameForm gf;
     static JLabel scoreLabel;
     static JLabel levelLabel;
     JButton mainMenuButton = new JButton("main menu");
@@ -27,8 +27,14 @@ public class GameForm extends JFrame {
     JButton loadButton = new JButton("Load");
     JButton newBlockButton = new JButton("New Block");
     public GameForm() {
-        ga = new GameArea(10);
+        ga = new GameArea(this, 10);
         qa = new QueueArea(ga);
+        gf=this;
+        //Thread t = new Thread(qa);
+        //t.run();
+    }
+    public void start() {
+
         this.add(ga);
         this.add(qa);
         this.setTitle("Game Form");
@@ -45,7 +51,12 @@ public class GameForm extends JFrame {
         p.add(saveButton);
         p.add(loadButton);
         p.add(newBlockButton);
-
+        new Timer(100, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gf.repaint();
+            }
+        }).start();
         mainMenuButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 //this.setVisible(false);
@@ -77,7 +88,6 @@ public class GameForm extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ga.saveFallenBlocks();
-                ga.saveFallingBlock();
             }
         });
         saveButton.setFocusable(false);
@@ -95,8 +105,10 @@ public class GameForm extends JFrame {
         newBlockButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                ga.addBlockToQueue();
                 qa.paintQueue();
-                ga.repaint();
+                //qa.repaint();
+                gf.repaint();
             }
         });
         newBlockButton.setFocusable(false);

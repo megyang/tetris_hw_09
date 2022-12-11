@@ -26,10 +26,11 @@ public class GameArea extends JPanel {
     private Block[] blocks;
     private Block queuedBlock;
     private LinkedList<Block> blockqueue=new LinkedList<>();
-    private boolean getFromQueue=false;
-    private String saveFallenBlocksFile = "saveFallenBlocksFile";
 
-    public GameArea(int inColumns) {
+    private GameForm gf;
+
+    public GameArea(GameForm gf, int inColumns) {
+        this.gf = gf;
         //location of GameArea on the GameForm
         blocks = new Block[]{ new IShape(),
                 new JShape(),
@@ -87,7 +88,7 @@ public class GameArea extends JPanel {
         blockqueue.add(newblock);
     }
 
-    public Queue<Block> getBlockqueue() {
+    public LinkedList<Block> getBlockqueue() {
         return blockqueue;
     }
 
@@ -457,55 +458,7 @@ public class GameArea extends JPanel {
         }
         repaint();
     }
-    public void saveFallingBlock() {
-        StringBuilder builder = new StringBuilder();
-        BufferedWriter bw;
-        FileWriter fw;
 
-        Color c = block.getColor();
-        int x = block.getX();
-        int y = block.getY();
-        //int[][] shape =  new int[][]{{1, 1, 1, 1}};
-        int[][] shape = block.getShape();
-        String shapeName = "no shape";
-        if (Arrays.deepEquals(shape,new int[][]{{1, 1, 1, 1}})) {
-            shapeName = "{{1, 1, 1, 1}}";
-        } else if (shape == new int[][]{{0,1},{0,1},{1,1}}) {
-            shapeName = "{{0,1},{0,1},{1,1}}";
-        } else if (shape == new int[][]{{1,0},{1,0},{1,1}}) {
-            shapeName = "{{1,0},{1,0},{1,1}}";
-        } else if (shape == new int[][]{{1,1},{1,1}}) {
-            shapeName = "{{1,1},{1,1}}";
-        } else if (shape == new int[][]{{0,1,1},{1,1,0}}) {
-            shapeName = "{{0,1,1},{1,1,0}}";
-        } else if (shape == new int[][]{{1,1,1},{0,1,0}}) {
-            shapeName = "{{1,1,1},{0,1,0}}";
-        } else if (shape == new int[][]{{1,1,0},{0,1,1}}) {
-            shapeName = "{{1,1,0},{0,1,1}}";
-        }
-
-        builder.append(c + ",");
-        builder.append(x + ",");
-        builder.append(y + ",");
-        builder.append(shapeName);
-
-        try {
-            fw = new FileWriter("files/fallingblocks.csv",false);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        bw = new BufferedWriter(fw);
-        try {
-            bw.write(builder.toString());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            bw.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 
     private void drawOneGrid(Graphics g, int x, int y, Color blockColor){
@@ -531,5 +484,6 @@ public class GameArea extends JPanel {
         if (block != null) {
             drawBlock(g);
         }
+        //gf.qa.repaint();
     }
 }

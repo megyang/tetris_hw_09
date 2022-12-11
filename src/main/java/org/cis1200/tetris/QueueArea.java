@@ -3,14 +3,15 @@ package org.cis1200.tetris;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Queue;
 
-public class QueueArea extends JPanel {
+public class QueueArea extends JPanel implements Runnable {
     private int rows=6;
     private int columns=6;
     private int cellSize=20;
     private Block queuedBlock;
-    private Queue<Block> blockqueue;
+    private LinkedList<Block> blockqueue;
     private GameArea ga;
     private int x = 400;
     private int y = 0;
@@ -27,12 +28,13 @@ public class QueueArea extends JPanel {
         //ga.addBlockToQueue();
         //blockqueue = ga.getBlockqueue();
         //queuedBlock = blockqueue.peek();
-        repaint();
+        //repaint();
     }
+
     public void paintQueue () {
-        ga.addBlockToQueue();
+        //ga.addBlockToQueue();
         blockqueue = ga.getBlockqueue();
-        repaint();
+        //repaint();
     }
     private void drawBlocks(Graphics g) {
         Block blk=null;
@@ -79,6 +81,19 @@ public class QueueArea extends JPanel {
 
         if (blockqueue != null) {
             drawBlocks(g);
+        }
+    }
+
+    /**
+     * Runs this operation.
+     */
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(1000);
+            repaint();
+        } catch (InterruptedException e) {
+            return;
         }
     }
 }
