@@ -44,6 +44,7 @@ public class GameArea extends JPanel {
         columns = inColumns;
         cellSize = this.getBounds().width/columns;
         rows = this.getBounds().height/cellSize;
+        fallenBlocks = new Color[rows][columns];
     }
 
     public void resetBlocks() {
@@ -381,7 +382,7 @@ public class GameArea extends JPanel {
 
     private void drawFallenBlocks (Graphics g) {
         Color color;
-        if(fallenBlocks==null) {
+        if(fallenBlocks==null||fallenBlocks.length==0) {
             return;
         }
         for (int i = 0; i < rows; i++) {
@@ -441,7 +442,13 @@ public class GameArea extends JPanel {
 
     }
     public void loadFallenblocks() {
-        BufferedReader br = FileLineIterator.fileToReader(PATH_TO_FALLEN);
+        BufferedReader br = null;
+        try {
+            br = FileLineIterator.fileToReader(PATH_TO_FALLEN);
+        } catch (Exception e) {
+            System.out.println("Problem reading from "+PATH_TO_FALLEN+" You need to save a game first\n");
+            return;
+        }
         List<String[]> fallenList = TetrisParser.csvDataToFallen(br);
         resetBlocks();
         int i=0,j=0;

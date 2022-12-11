@@ -63,7 +63,9 @@ public class GameForm extends JFrame {
         mainMenuButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 //this.setVisible(false);
-                gt.interrupt();
+                if(gt!=null)
+                    gt.interrupt();
+
                 Tetris.showStart();
             }
         });
