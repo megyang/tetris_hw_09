@@ -122,7 +122,7 @@ public class PlayFrame extends JFrame {
         try {
             pp = RWProperties.ReadFile(GAME_STATE);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            System.out.println("No saved game state found\n");
         }
         score = Integer.valueOf(pp.getProperty("Score",Integer.toString(score)));
         level = Integer.valueOf(pp.getProperty("Level",Integer.toString(level)));

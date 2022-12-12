@@ -10,6 +10,9 @@ public class Tetris implements Runnable {
     private static LeaderBoardFrame lf;
     private static Instructions i;
     private static final String CONFIG = ".properties";
+
+    //following fields are stored in .properties file
+    //if .properties files is not available, the use default value
     public static String PATH_TO_FALLEN = "files/fallenblocks.csv";
     public static String LEADERBOARD_PATH = "files/leaderboard";
     public static String GAME_STATE="files/game_state.properties";
@@ -50,6 +53,17 @@ public class Tetris implements Runnable {
                 sf.setup();
                 sf.setVisible(true);
                 gf.setVisible(true);
+
+                Properties props;
+                try {
+                    props = RWProperties.ReadFile(CONFIG);
+                    PATH_TO_FALLEN = props.getProperty("PATH_TO_FALLEN");
+                    LEADERBOARD_PATH = props.getProperty("LEADERBOARD_PATH");
+                    GAME_STATE=props.getProperty("GAME_STATE");
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                    System.out.println("\nCouldn't open .properties. Using Default configuration");
+                }
             }
         });
     }
@@ -74,6 +88,7 @@ public class Tetris implements Runnable {
             props = RWProperties.ReadFile(CONFIG);
             PATH_TO_FALLEN = props.getProperty("PATH_TO_FALLEN");
             LEADERBOARD_PATH = props.getProperty("LEADERBOARD_PATH");
+            GAME_STATE=props.getProperty("GAME_STATE");
         } catch (IOException e) {
             System.out.println(e.getMessage());
             System.out.println("\nCouldn't open .properties. Using Default configuration");

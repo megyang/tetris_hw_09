@@ -69,7 +69,7 @@ public class LeaderBoardFrame extends JFrame {
             os.close();
             fs.close();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.getMessage()+"\nNo saved leaderboard yet\n");
         }
     }
 
