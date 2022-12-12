@@ -104,7 +104,14 @@ PennKey: 34342588
 - Evaluate your design. Is there a good separation of functionality? How well is
   private state encapsulated? What would you refactor, if given the chance?
 
-
+  I think there is a decent amount of separation of functionality. I was able to separate each of the many methods
+  into various classes properly. Game play, game display, and game thread were all separated.
+  I think there is good private state encapsulation.
+  I used get, set, and other accessor methods that to manipulate the private fields and such.
+  LinkedList for queuing blocks was not passed directly to the AueueArea class. The queue cannot be modified by the
+  QueueArea class, Queue area is only used to display the queue.
+  I will add configuration file to avoid hard coding things like file path and some of the parameters.
+  If I had the time I might have added a pause and resume button as well as a function to hold a block, much like the original tetris game.
 
 ========================
 =: External Resources :=
@@ -112,3 +119,7 @@ PennKey: 34342588
 
 - Cite any external resources (images, tutorials, etc.) that you may have used
   while implementing your game.
+
+  tutorials:
+    https://coderanch.com/t/678800/java/Tetris-Game-Java-Swing
+    https://www.ssaurel.com/blog/learn-to-create-a-tetris-game-in-java-with-swing/
