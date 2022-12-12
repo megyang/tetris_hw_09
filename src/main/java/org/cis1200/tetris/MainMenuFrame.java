@@ -5,13 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class MainMenuFrame extends JFrame{
+public class MainMenuFrame extends JFrame {
     JButton leaderboardButton = new JButton("leaderboard");
     JButton startButton = new JButton("start game");
     JButton quitButton = new JButton("quit game");
     JButton instructionsButton = new JButton("instructions");
-    JPanel instructPanel = new JPanel();
     MainMenuFrame sf;
+
     public MainMenuFrame() {
 
         this.setTitle("Startup Form");
@@ -23,15 +23,13 @@ public class MainMenuFrame extends JFrame{
         this.setSize(500, 500);
         this.setVisible(true);
         //this.add(instructPanel);
-        sf=this;
+        sf = this;
     }
 
     public void setup() {
-        startButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                //this.setVisible(false);
-                Tetris.start();
-            }
+        startButton.addActionListener(e -> {
+            //this.setVisible(false);
+            Tetris.start();
         });
 
         leaderboardButton.addActionListener(new ActionListener() {
@@ -48,26 +46,11 @@ public class MainMenuFrame extends JFrame{
             }
         });
 
-        String instruction="<html><b>Here is how to play the game</b><br>" +
-                "<li>asfsafsfdfdsfa<br>"+
-                "<li>asfafasfafsaf<br>" +
-                "<li>asdfaswerwreewre<br>"+
-                "<li>sadfalsjljljljljjllkjsafsafdasfasfdsafsafsfsafsasfsafsfsafsafasfsafd<br>"+
-                "fsafsafsafsafasfasfdasfdsadfasfafsafdasfsafd"+
-                "</html>";
-
-        JLabel instructLable = new JLabel();
-        instructPanel.add(instructLable);
-        sf.add(instructPanel);
 
         instructionsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                instructLable.setFont(new Font("Arial", Font.ITALIC, 14));
-                instructLable.setForeground(Color.black);
-                instructLable.setHorizontalAlignment(JLabel.LEFT);
-                instructLable.setBackground(Color.CYAN);
-                instructLable.setText(instruction);
+                Tetris.showInstructions();
             }
         });
 

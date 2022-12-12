@@ -7,8 +7,9 @@ import java.util.Properties;
 public class Tetris implements Runnable {
     private static PlayFrame gf;
     private static MainMenuFrame sf;
-    private static LeaderboardFrame lf;
-    private static String CONFIG = ".properties";
+    private static LeaderBoardFrame lf;
+    private static Instructions i;
+    private static final String CONFIG = ".properties";
     public static String PATH_TO_FALLEN = "files/fallenblocks.csv";
     public static String LEADERBOARD_PATH = "files/leaderboard";
 
@@ -17,8 +18,13 @@ public class Tetris implements Runnable {
         gf.setVisible(true);
         gf.startGame();
     }
+
     public static void showStart() {
         sf.setVisible(true);
+    }
+
+    public static void showInstructions() {
+        i.setVisible(true);
     }
 
     public static void gameOver(int score) {
@@ -27,15 +33,18 @@ public class Tetris implements Runnable {
         gf.setVisible(false);
         lf.addPlayer(userName, score);
     }
+
     public static void showLeaderboard() {
         lf.setVisible(true);
     }
+
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 gf = new PlayFrame();
                 sf = new MainMenuFrame();
-                lf = new LeaderboardFrame();
+                lf = new LeaderBoardFrame();
+                i = new Instructions();
                 gf.start();
                 sf.setup();
                 sf.setVisible(true);
@@ -51,14 +60,15 @@ public class Tetris implements Runnable {
     public void run() {
         gf = new PlayFrame();
         sf = new MainMenuFrame();
-        lf = new LeaderboardFrame();
+        lf = new LeaderBoardFrame();
+        i = new Instructions();
         gf.start();
         sf.setup();
         sf.setVisible(true);
         gf.setVisible(true);
 
 
-        Properties props = null;
+        Properties props;
         try {
             props = ReadProperties.readConfigFile(CONFIG);
             PATH_TO_FALLEN = props.getProperty("PATH_TO_FALLEN");

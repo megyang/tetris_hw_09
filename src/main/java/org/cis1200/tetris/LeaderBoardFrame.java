@@ -10,21 +10,23 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+
 import static org.cis1200.tetris.Tetris.LEADERBOARD_PATH;
 
-public class LeaderboardFrame extends JFrame {
-    String[] cols = new String[] {"name","score"};
+public class LeaderBoardFrame extends JFrame {
+    String[] cols = new String[]{"name", "score"};
     DefaultTableModel defaultModel = new DefaultTableModel(cols, 0);
     private TableRowSorter<TableModel> sorter;
     JButton mainMenuButton = new JButton("main menu");
     JPanel myPanel = new JPanel();
 
     JTable leaderBoard = new JTable(defaultModel);
-    public LeaderboardFrame() {
+
+    public LeaderBoardFrame() {
 
         myPanel.setVisible(true);
         this.setLayout(new FlowLayout());
-        this.setSize(500,250);
+        this.setSize(500, 250);
         this.add(mainMenuButton);
         this.add(myPanel);
         myPanel.add(new JScrollPane(leaderBoard));
@@ -49,12 +51,12 @@ public class LeaderboardFrame extends JFrame {
             fs.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
-            System.out.println("\nCouldn't save to "+LEADERBOARD_PATH+" \nMake sure it is a valid path");
+            System.out.println("\nCouldn't save to " + LEADERBOARD_PATH + " \nMake sure it is a valid path");
         }
 
     }
 
-    private void tableData(){
+    private void tableData() {
         Vector colId = new Vector();
         colId.add("name");
         colId.add("score");
@@ -63,7 +65,7 @@ public class LeaderboardFrame extends JFrame {
         try {
             fs = new FileInputStream(LEADERBOARD_PATH);
             ObjectInputStream os = new ObjectInputStream(fs);
-            defaultModel.setDataVector( (Vector<Vector>)os.readObject(), colId);
+            defaultModel.setDataVector((Vector<Vector>) os.readObject(), colId);
             os.close();
             fs.close();
         } catch (Exception e) {
@@ -76,13 +78,13 @@ public class LeaderboardFrame extends JFrame {
         leaderBoard.setRowSorter(sorter);
 
         ArrayList<RowSorter.SortKey> keys = new ArrayList<>();
-        keys.add(new RowSorter.SortKey(1,SortOrder.DESCENDING));
+        keys.add(new RowSorter.SortKey(1, SortOrder.DESCENDING));
 
         sorter.setSortKeys(keys);
     }
 
     public void addPlayer(String userName, int score) {
-        defaultModel.addRow(new Object[] {userName, score});
+        defaultModel.addRow(new Object[]{userName, score});
         saveLeaderboard();
         sorter.sort();
         this.setVisible(true);

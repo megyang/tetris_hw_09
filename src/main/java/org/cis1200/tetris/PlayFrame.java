@@ -13,32 +13,30 @@ import java.awt.event.ActionListener;
 //overriding is giving a method a different body
 
 public class PlayFrame extends JFrame {
-    private boolean loadedgame=false;
-    private GameBoard ga;
-    private QueueArea qa;
+    private boolean loadedgame = false;
+    private final GameBoard ga;
+    private final QueueArea qa;
     private PlayThread gt;
-    private PlayFrame gf;
+    private final PlayFrame gf;
     static JLabel scoreLabel;
     static JLabel levelLabel;
-    JButton mainMenuButton = new JButton("main menu");
-    JButton pauseButton = new JButton("Pause");
-    JButton resumeButton = new JButton("Resume");
-    JButton saveButton = new JButton("Save");
-    JButton loadButton = new JButton("Load");
-    JButton newBlockButton = new JButton("Queue");
+    JButton mainMenuButton = new JButton("main");
+    JButton saveButton = new JButton("save");
+    JButton loadButton = new JButton("load");
+    JButton addToQueueButton = new JButton("queue");
+
     public PlayFrame() {
         ga = new GameBoard(this, 10);
         qa = new QueueArea(ga);
-        gf=this;
-        //Thread t = new Thread(qa);
-        //t.run();
+        gf = this;
     }
+
     public void start() {
 
         this.add(ga);
         this.add(qa);
         this.setTitle("Game Form");
-        this.setSize(610,850);
+        this.setSize(610, 850);
 
         scoreLabel = new JLabel("score: 0");
         levelLabel = new JLabel("level: 1");
@@ -46,11 +44,9 @@ public class PlayFrame extends JFrame {
         p.add(scoreLabel);
         p.add(levelLabel);
         p.add(mainMenuButton);
-        //p.add(pauseButton);
-        //p.add(resumeButton);
         p.add(saveButton);
         p.add(loadButton);
-        p.add(newBlockButton);
+        p.add(addToQueueButton);
 
         //Use a timer to repaint GameForm. gf.repaint will repaint all JPanels inside it
         //GameArea and QueueArea
@@ -63,7 +59,7 @@ public class PlayFrame extends JFrame {
         mainMenuButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 //this.setVisible(false);
-                if(gt!=null)
+                if (gt != null)
                     gt.interrupt();
 
                 Tetris.showStart();
@@ -71,56 +67,33 @@ public class PlayFrame extends JFrame {
         });
         mainMenuButton.setFocusable(false);
 
-        pauseButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                //this.setVisible(false);
-                gt.interrupt();
 
-            }
-        });
-        pauseButton.setFocusable(false);
-        resumeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(gt.isInterrupted()) {
-                    gt.interrupt();
-                }
-                gt.start();
-            }
-        });
-        resumeButton.setFocusable(false);
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ga.saveFallenBlocks();
-            }
-        });
         saveButton.setFocusable(false);
 
         loadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ga.loadFallenblocks();
-                loadedgame=true;
+                loadedgame = true;
 
             }
         });
         loadButton.setFocusable(false);
 
-        newBlockButton.addActionListener(new ActionListener() {
-            @Override
+        addToQueueButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ga.addBlockToQueue();
                 qa.retrieveQueue();
                 gf.repaint();
             }
         });
-        newBlockButton.setFocusable(false);
+        addToQueueButton.setFocusable(false);
 
         ga.add(p);
         controls();
         //startGame();
     }
+
     private void controls() {
         //add keystrokes; keyboard action ex: key press
         InputMap im = this.getRootPane().getInputMap();
@@ -131,11 +104,11 @@ public class PlayFrame extends JFrame {
 
         //pass any data (object) as the second parameter. it doesn't have to be "right"
         //it can be anything.
-        im.put(KeyStroke.getKeyStroke("RIGHT"),"right");
-        im.put(KeyStroke.getKeyStroke("LEFT"),"left");
-        im.put(KeyStroke.getKeyStroke("UP"),"up");
-        im.put(KeyStroke.getKeyStroke("DOWN"),"down");
-        im.put(KeyStroke.getKeyStroke("SPACE"),"space");
+        im.put(KeyStroke.getKeyStroke("RIGHT"), "right");
+        im.put(KeyStroke.getKeyStroke("LEFT"), "left");
+        im.put(KeyStroke.getKeyStroke("UP"), "up");
+        im.put(KeyStroke.getKeyStroke("DOWN"), "down");
+        im.put(KeyStroke.getKeyStroke("SPACE"), "space");
 
         //abstract cannot be instantiated (aka new AbstractAction()),
         // but they can be extended
@@ -175,18 +148,21 @@ public class PlayFrame extends JFrame {
         });
 
     }
-    public void startGame(){
-        if(!loadedgame) {
+
+    public void startGame() {
+        if (!loadedgame) {
             ga.resetBlocks(); //reset if game not loaded from saved file
         } else {
-            loadedgame=false; //if loaded from file, continue and reset flag
+            loadedgame = false; //if loaded from file, continue and reset flag
         }
         gt = new PlayThread(ga, this);
         gt.start();
     }
+
     public void updateScore(int score) {
         scoreLabel.setText("score: " + score);
     }
+
     public void updateLevel(int level) {
         levelLabel.setText("level: " + level);
     }

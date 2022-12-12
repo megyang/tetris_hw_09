@@ -8,41 +8,35 @@ import java.awt.*;
 import java.io.*;
 import java.util.*;
 import java.util.List;
-
 import static org.cis1200.tetris.Tetris.PATH_TO_FALLEN;
 
 //draw on JFrame
 //override paintComponent method from JPanel
 public class GameBoard extends JPanel {
-    private int rows;
-    private int columns;
-    private int cellSize;
+    private final int rows;
+    private final int columns;
+    private final int cellSize;
     private Color[][] fallenBlocks;
-
     private Block block;
-    private Block[] blocks;
-    private Block queuedBlock;
-    private LinkedList<Block> blockqueue=new LinkedList<>();
+    private final Block[] blocks;
+    private final LinkedList<Block> blockqueue = new LinkedList<>();
 
-    private PlayFrame gf;
-
-    public GameBoard(PlayFrame gf, int inColumns) {
-        this.gf = gf;
+    public GameBoard(PlayFrame pf, int inColumns) {
         //location of GameArea on the GameForm
-        blocks = new Block[]{ new IBlock(),
-                new JBlock(),
-                new LBlock(),
-                new OBlock(),
-                new SBlock(),
-                new TBlock(),
-                new ZBlock()};
+        blocks = new Block[]{new IBlock(),
+                                new JBlock(),
+                                new LBlock(),
+                                new OBlock(),
+                                new SBlock(),
+                                new TBlock(),
+                                new ZBlock()};
 
-        this.setBounds(0,0,400,800);
+        this.setBounds(0, 0, 400, 800);
         this.setBackground(Color.lightGray);
 
         columns = inColumns;
-        cellSize = this.getBounds().width/columns;
-        rows = this.getBounds().height/cellSize;
+        cellSize = this.getBounds().width / columns;
+        rows = this.getBounds().height / cellSize;
         fallenBlocks = new Color[rows][columns];
     }
 
@@ -51,9 +45,9 @@ public class GameBoard extends JPanel {
     }
 
     public void produceBlock() {
-        if(blockqueue.size()>0) {
+        if (blockqueue.size() > 0) {
             block = blockqueue.remove();
-            System.out.println("Queue size="+blockqueue.size()+"\n");
+            System.out.println("Queue size=" + blockqueue.size() + "\n");
 
         } else {
             Random r = new Random();
@@ -72,7 +66,7 @@ public class GameBoard extends JPanel {
         Random r = new Random();
         Block tmpblock = blocks[r.nextInt(blocks.length)];
         Block newblock = null;
-        if ( tmpblock instanceof IBlock) {
+        if (tmpblock instanceof IBlock) {
             newblock = new IBlock();
         } else if (tmpblock instanceof JBlock) {
             newblock = new JBlock();
@@ -91,7 +85,7 @@ public class GameBoard extends JPanel {
         blockqueue.add(newblock);
     }
 
-//Return duplicated LinkedList for proper encapsulation
+    //Return duplicated LinkedList for proper encapsulation
     public LinkedList<Block> getBlockqueue() {
         LinkedList<Block> dupblk = new LinkedList<>();
         dupblk.addAll(blockqueue);
@@ -106,8 +100,8 @@ public class GameBoard extends JPanel {
             int w = block.getWidth();
             int h = block.getHeight();
 
-            for(int col = 0; col < w; col++) {
-                for(int row = h - 1; row >=0; row --) {
+            for (int col = 0; col < w; col++) {
+                for (int row = h - 1; row >= 0; row--) {
                     if (shape[row][col] != 0) {
                         int x = col + block.getX();
                         int y = row + block.getY() + 1;
@@ -115,7 +109,10 @@ public class GameBoard extends JPanel {
                             //terminates the loop
                             break;
                         }
-                        if(y < fallenBlocks.length && fallenBlocks[y][x] != null) {
+                        if (x < 0) {
+                            return true;
+                        }
+                        if (y < fallenBlocks.length && fallenBlocks[y][x] != null) {
                             return false;
                         }
                         break;
@@ -127,15 +124,15 @@ public class GameBoard extends JPanel {
     }
 
     private boolean checkLeftBounds() {
-        if (block.getX()==0) {
+        if (block.getX() == 0) {
             return false;
         } else {
             int[][] shape = block.getShape();
             int w = block.getWidth();
             int h = block.getHeight();
 
-            for(int row = 0; row < h; row++) {
-                for(int col = 0; col < w; col++) {
+            for (int row = 0; row < h; row++) {
+                for (int col = 0; col < w; col++) {
                     if (shape[row][col] != 0) {
                         int x = col + block.getX() - 1;
                         int y = row + block.getY();
@@ -143,7 +140,7 @@ public class GameBoard extends JPanel {
                             //terminates the loop
                             break;
                         }
-                        if(x > 0 && fallenBlocks[y][x] != null) {
+                        if (x > 0 && fallenBlocks[y][x] != null) {
                             return false;
                         }
                         break;
@@ -163,8 +160,8 @@ public class GameBoard extends JPanel {
             int w = block.getWidth();
             int h = block.getHeight();
 
-            for(int row = 0; row < h; row++) {
-                for(int col = w - 1; col >=0 ; col--) {
+            for (int row = 0; row < h; row++) {
+                for (int col = w - 1; col >= 0; col--) {
                     if (shape[row][col] != 0) {
                         int x = col + block.getX() + 1;
                         int y = row + block.getY();
@@ -172,7 +169,7 @@ public class GameBoard extends JPanel {
                             //terminates the loop
                             break;
                         }
-                        if(x < fallenBlocks[y].length && fallenBlocks[y][x] != null) {
+                        if (x < fallenBlocks[y].length && fallenBlocks[y][x] != null) {
                             return false;
                         }
                         break;
@@ -182,6 +179,7 @@ public class GameBoard extends JPanel {
             return true;
         }
     }
+
     public boolean checkBounds() {
         if (block.getY() < 0) {
             block = null;
@@ -190,6 +188,7 @@ public class GameBoard extends JPanel {
             return false;
         }
     }
+
     public boolean moveDown() {
         if (!checkBottomBounds()) {
             return false;
@@ -223,7 +222,7 @@ public class GameBoard extends JPanel {
         if (block == null) {
             return;
         }
-        while(checkBottomBounds()){
+        while (checkBottomBounds()) {
             block.moveDown();
         }
     }
@@ -234,12 +233,13 @@ public class GameBoard extends JPanel {
         }
         //Dynamic dispatching
         block.rotate();
-        if(block.getX()<0) {
+        if (block.getX() < 0) {
             block.setX(0);
         } else if (block.getX() + block.getWidth() >= columns) {
             block.setX(columns - block.getWidth());
-        } else if (block.getY() + block.getHeight() >= rows)
+        } else if (block.getY() + block.getHeight() >= rows) {
             block.setY(rows - block.getHeight());
+        }
 
         int[][] shape = block.getShape();
         int w = block.getWidth();
@@ -247,8 +247,8 @@ public class GameBoard extends JPanel {
 
 
         //left bound
-        for(int row = 0; row < h; row++) {
-            for(int col = 0; col < w; col++) {
+        for (int row = 0; row < h; row++) {
+            for (int col = 0; col < w; col++) {
                 if (shape[row][col] != 0) {
                     int x = col + block.getX() - 1;
                     int y = row + block.getY();
@@ -257,7 +257,7 @@ public class GameBoard extends JPanel {
                     }
                     if (x < 0) {
                         block.setX(0);
-                    } else if(x >= 0 && fallenBlocks[y][x] != null) {
+                    } else if (x >= 0 && fallenBlocks[y][x] != null) {
                         block.moveRight();
                         block.moveRight();
                     }
@@ -267,8 +267,8 @@ public class GameBoard extends JPanel {
         }
 
         //right bound
-        for(int row = 0; row < h; row++) {
-            for(int col = w - 1; col >=0 ; col--) {
+        for (int row = 0; row < h; row++) {
+            for (int col = w - 1; col >= 0; col--) {
                 if (shape[row][col] != 0) {
                     int x = col + block.getX() + 1;
                     int y = row + block.getY();
@@ -277,17 +277,19 @@ public class GameBoard extends JPanel {
                     }
                     if (x >= columns) {
                         block.setX(columns - block.getWidth());
-                    } else if(x < fallenBlocks[y].length && fallenBlocks[y][x] != null) {
+                    } else if (x < fallenBlocks[y].length && fallenBlocks[y][x] != null) {
                         block.moveLeft();
+
                     }
+
                     break;
                 }
             }
         }
 
         //bottom bound
-        for(int col = 0; col < w; col++) {
-            for(int row = h - 1; row >=0; row --) {
+        for (int col = 0; col < w; col++) {
+            for (int row = h - 1; row >= 0; row--) {
                 if (shape[row][col] != 0) {
                     int x = col + block.getX();
                     int y = row + block.getY() + 1;
@@ -296,7 +298,7 @@ public class GameBoard extends JPanel {
                         break;
                     }
 
-                    if(y > fallenBlocks.length && fallenBlocks[y][x] != null) {
+                    if (y > fallenBlocks.length && fallenBlocks[y][x] != null) {
                         block.moveUp();
                     }
                     break;
@@ -306,7 +308,8 @@ public class GameBoard extends JPanel {
 
         repaint();
     }
-    private void drawBlock(Graphics g){
+
+    private void drawBlock(Graphics g) {
         int blockHeight = block.getHeight();
         int blockWidth = block.getWidth();
         int[][] blockShape = block.getShape();
@@ -355,11 +358,12 @@ public class GameBoard extends JPanel {
 
     private void shiftDown(int row) {
         for (int r = row; r > 0; r--) {
-            for (int c = 0; c < columns; c++) {
-                fallenBlocks[r][c] = fallenBlocks[r-1][c];
+            if (columns >= 0) {
+                System.arraycopy(fallenBlocks[r - 1], 0, fallenBlocks[r], 0, columns);
             }
         }
     }
+
     public void keepFallenBlocks() {
         int[][] shape = block.getShape();
         int h = block.getHeight();
@@ -379,13 +383,13 @@ public class GameBoard extends JPanel {
         }
     }
 
-    private void drawFallenBlocks (Graphics g) {
-        Color color;
-        if(fallenBlocks==null||fallenBlocks.length==0) {
+    private void drawFallenBlocks(Graphics g) {
+        if (fallenBlocks == null) {
             return;
         }
+        Color color;
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j ++) {
+            for (int j = 0; j < columns; j++) {
                 color = fallenBlocks[i][j];
                 if (color != null) {
                     int x = j * cellSize;
@@ -400,61 +404,61 @@ public class GameBoard extends JPanel {
 
     public void saveFallenBlocks() {
         StringBuilder builder = new StringBuilder();
-        BufferedWriter bw =null;
-        FileWriter fw =null;
+        BufferedWriter bw = null;
+        FileWriter fw = null;
         String color;
-        if(fallenBlocks==null) {
-            return;
-        }
-        for(int i = 0; i < fallenBlocks.length; i++) {
+        for (int i = 0; i < fallenBlocks.length; i++) {
             for (int j = 0; j < fallenBlocks[i].length; j++) {
                 if (fallenBlocks[i][j] != null) {
                     int r = fallenBlocks[i][j].getRed();
                     int g = fallenBlocks[i][j].getGreen();
                     int b = fallenBlocks[i][j].getBlue();
-                    color = String.valueOf(r) + ";" + String.valueOf(g) + ";" + String.valueOf(b);
+                    color = r + ";" + g + ";" + b;
                     builder.append(color);
                 } else {
                     builder.append("null");
                 }
-                if(j < fallenBlocks[i].length - 1)//if this is not the last row element
+                if (j < fallenBlocks[i].length - 1)//if this is not the last row element
                     builder.append(",");//then add comma (if you don't like commas you can use spaces)
             }
-            if(i<fallenBlocks.length-1) {
+            if (i < fallenBlocks.length - 1) {
                 builder.append("\n");
             }
         }
 
         try {
-            fw = new FileWriter(PATH_TO_FALLEN,false);
+            fw = new FileWriter(PATH_TO_FALLEN, false);
             bw = new BufferedWriter(fw);
             bw.write(builder.toString());
         } catch (IOException e) {
             System.out.println(e.getMessage());
-            System.out.println("\nCouldn't save to "+PATH_TO_FALLEN+" \nMake sure it is a valid path");
+            System.out.println("\nCouldn't save to " + PATH_TO_FALLEN + " \nMake sure it is a valid path");
         }
         try {
-            bw.close();
+            if(bw!=null) {
+                bw.close();
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
     }
+
     public void loadFallenblocks() {
-        BufferedReader br = null;
+        BufferedReader br;
         try {
             br = FileLineIterator.fileToReader(PATH_TO_FALLEN);
         } catch (Exception e) {
-            System.out.println("Problem reading from "+PATH_TO_FALLEN+" You need to save a game first\n");
+            System.out.println("Problem reading from " + PATH_TO_FALLEN + " You need to save a game first\n");
             return;
         }
         List<String[]> fallenList = TetrisParser.csvDataToFallen(br);
         resetBlocks();
-        int i=0,j=0;
-        for (String[] line:fallenList) {
-            j=0;
+        int i = 0, j;
+        for (String[] line : fallenList) {
+            j = 0;
             for (String s : line) {
-                if(s.equals("null")){
+                if (s.equals("null")) {
                     fallenBlocks[i][j] = null;
                 } else {
                     String[] colors = s.split(";");
@@ -470,31 +474,29 @@ public class GameBoard extends JPanel {
         repaint();
     }
 
-
-
-    private void drawOneGrid(Graphics g, int x, int y, Color blockColor){
+    private void drawOneGrid(Graphics g, int x, int y, Color blockColor) {
         g.setColor(blockColor);
-        g.fillRect(x,y, cellSize, cellSize);
+        g.fillRect(x, y, cellSize, cellSize);
         g.setColor(Color.black);
-        g.drawRect(x,y, cellSize, cellSize);
+        g.drawRect(x, y, cellSize, cellSize);
     }
+
+
     //Graphics g is a painter
     @Override
-    protected void paintComponent(Graphics g)
-    {
+    protected void paintComponent(Graphics g) {
         //call the paintComponent of the superclass (original method)
         super.paintComponent(g);
         g.setColor(Color.black);
-        for (int i = 0; i < 400/cellSize; i++) {
-            for (int j = 0; j < 800/cellSize; j++) {
-                g.drawRect(i*cellSize, j*cellSize, cellSize, cellSize);
+        for (int i = 0; i < 400 / cellSize; i++) {
+            for (int j = 0; j < 800 / cellSize; j++) {
+                g.drawRect(i * cellSize, j * cellSize, cellSize, cellSize);
             }
         }
-        g.drawRect(0,0,400,800);
+        g.drawRect(0, 0, 400, 800);
         drawFallenBlocks(g);
         if (block != null) {
             drawBlock(g);
         }
-        //gf.qa.repaint();
     }
 }
