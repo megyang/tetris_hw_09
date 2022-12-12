@@ -33,7 +33,7 @@ public class Instructions extends JFrame {
                 "<li>Click on \"Queue\" Button anytime to add tetrominoes to block " +
                 "preview on the right" +
                 "<li>Click on the save and load buttons to save a particular game " +
-                "state and reload the game" +
+                " state and reload the game" +
                 "to that game state." +
 
                 "</ul></html>";

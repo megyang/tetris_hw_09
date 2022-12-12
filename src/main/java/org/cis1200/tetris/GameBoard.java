@@ -20,10 +20,10 @@ public class GameBoard extends JPanel {
     private Block block;
     private final Block[] blocks;
     private final LinkedList<Block> blockQueue = new LinkedList<>();
-    private final PlayFrame gf;
+    private final PlayFrame pf;
 
-    public GameBoard(PlayFrame gf, int inColumns) {
-        this.gf = gf;
+    public GameBoard(PlayFrame pf, int inColumns) {
+        this.pf = pf;
         //location of GameArea on the GameForm
         blocks = new Block[]{new IBlock(),
                                 new JBlock(),
@@ -409,6 +409,7 @@ public class GameBoard extends JPanel {
                 } else {
                     builder.append("null");
                 }
+                //check
                 if (j < fallenBlocks.length - 1) {
                     builder.append(",");
                 }

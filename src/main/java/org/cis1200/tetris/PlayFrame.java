@@ -15,10 +15,10 @@ import java.awt.event.ActionListener;
 
 public class PlayFrame extends JFrame {
     private boolean loadGame = false;
-    private final GameBoard ga;
+    private final GameBoard gb;
     private final QueueArea qa;
-    private PlayThread gt;
-    private PlayFrame gf;
+    private PlayThread pt;
+    private PlayFrame pf;
     static JLabel scoreLabel;
     static JLabel levelLabel;
     JButton mainMenuButton = new JButton("main");
@@ -27,9 +27,9 @@ public class PlayFrame extends JFrame {
     JButton addToQueueButton = new JButton("queue");
 
     public PlayFrame() {
-        ga = new GameBoard(gf, 10);
-        qa = new QueueArea(ga);
-        gf = this;
+        gb = new GameBoard(pf, 10);
+        qa = new QueueArea(gb);
+        pf = this;
     }
 
     public void start() {
@@ -48,15 +48,18 @@ public class PlayFrame extends JFrame {
         p.add(addToQueueButton);
 
         new Timer(100, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
-                gf.repaint();
+                pf.repaint();
             }
         }).start();
 
         mainMenuButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 //this.setVisible(false);
-                gt.interrupt();
+                if (pt != null) {
+                    pt.interrupt();
+                }
                 Tetris.showStart();
             }
         });
@@ -65,18 +68,18 @@ public class PlayFrame extends JFrame {
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 //this.setVisible(false);
-                ga.saveFallenBlocks();
-                gt.saveScore();
-                gt.saveLevel();
+                gb.saveFallenBlocks();
+                pt.saveScore();
+                pt.saveLevel();
             }
         });
         saveButton.setFocusable(false);
 
         loadButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ga.loadFallenBlocks();
-                gt.loadLevel();
-                gt.loadScore();
+                gb.loadFallenBlocks();
+                pt.loadLevel();
+                pt.loadScore();
                 loadGame = true;
             }
         });
@@ -84,14 +87,14 @@ public class PlayFrame extends JFrame {
 
         addToQueueButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ga.addQueue();
+                gb.addQueue();
                 qa.retrieveQueue();
-                gf.repaint();
+                pf.repaint();
             }
         });
         addToQueueButton.setFocusable(false);
 
-        ga.add(p);
+        gb.add(p);
         controls();
         //startGame();
     }
@@ -121,31 +124,31 @@ public class PlayFrame extends JFrame {
         am.put("right", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ga.moveRight();
+                gb.moveRight();
             }
         });
         am.put("left", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ga.moveLeft();
+                gb.moveLeft();
             }
         });
         am.put("up", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ga.rotate();
+                gb.rotate();
             }
         });
         am.put("down", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ga.moveDown();
+                gb.moveDown();
             }
         });
         am.put("space", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ga.drop();
+                gb.drop();
             }
         });
 
@@ -153,10 +156,10 @@ public class PlayFrame extends JFrame {
 
     public void startGame() {
         if (!loadGame) {
-            ga.resetBlocks();
+            gb.resetBlocks();
         }
-        gt = new PlayThread(ga, this);
-        gt.start();
+        pt = new PlayThread(gb, this);
+        pt.start();
     }
 
     public void updateScore(int score) {

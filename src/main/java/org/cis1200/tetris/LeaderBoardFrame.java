@@ -48,6 +48,7 @@ public class LeaderBoardFrame extends JFrame {
             os.close();
             fs.close();
         } catch (Exception e) {
+            System.out.println("couldn't save the leaderboard to file");
         }
 
     }
@@ -65,6 +66,7 @@ public class LeaderBoardFrame extends JFrame {
             os.close();
             fs.close();
         } catch (Exception e) {
+            System.out.println("no leaderboard loaded yet");
         }
     }
 

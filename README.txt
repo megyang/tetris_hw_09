@@ -108,3 +108,14 @@ PennKey: 34342588
   I had many get and other accessor methods that I used to manipulate the private variables and such.
   LinkedList for queue was not passed directly to the queueArea class. The queue cannot be modified by the
   QueueArea class, Queue area is only used to display the queue.
+
+========================
+=: External Resources :=
+========================
+
+- Cite any external resources (images, tutorials, etc.) that you may have used
+  while implementing your game.
+
+  tutorials:
+    https://coderanch.com/t/678800/java/Tetris-Game-Java-Swing
+    https://www.ssaurel.com/blog/learn-to-create-a-tetris-game-in-java-with-swing/
