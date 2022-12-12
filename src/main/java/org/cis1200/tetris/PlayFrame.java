@@ -32,6 +32,11 @@ public class PlayFrame extends JFrame {
         gf = this;
     }
 
+    public void start() {
+        this.add(gb);
+        this.add(qa);
+        this.setSize(610, 850);
+
         scoreLabel = new JLabel("score: 0");
         levelLabel = new JLabel("level: 1");
         JPanel p = new JPanel();

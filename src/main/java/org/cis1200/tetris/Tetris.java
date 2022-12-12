@@ -49,4 +49,15 @@ public class Tetris implements Runnable {
             }
         });
     }
+
+    @Override
+    public void run() {
+        pf = new PlayFrame();
+        mmf = new MainMenuFrame();
+        lf = new LeaderBoardFrame();
+        i = new Instructions();
+        pf.start();
+        mmf.setVisible(true);
+        pf.setVisible(true);
+    }
 }
