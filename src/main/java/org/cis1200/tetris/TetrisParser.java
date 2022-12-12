@@ -45,20 +45,13 @@ public class TetrisParser {
         String line;
         FileLineIterator flIter = new FileLineIterator(br);
         List<String[]> listOfRows = new LinkedList<>();
-/*
-        while (flIter.hasNext()) {
-            line = flIter.next();
-            String trimedline = line.trim();
-            String[] col=trimedline.split("\\,");
-            listOfRows.add(col);
-        }
-  */
+
         while (flIter.hasNext()) {
             line = flIter.next();
             String trimedline = line.trim();
             String[] col = trimedline.split("\\,");
             for (int i = 0; i < col.length; i++) {
-                if (!col[i].equals("null") && !col[i].matches(NUM_WORDS)) {  //if
+                if (!col[i].equals("null") && !col[i].matches(NUM_WORDS)) {
                     col[i] = "null";
                 }
             }
