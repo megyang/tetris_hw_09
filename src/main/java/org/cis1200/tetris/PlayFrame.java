@@ -155,9 +155,9 @@ public class PlayFrame extends JFrame {
     }
 
     public void startGame() {
-        if (!loadGame) {
+        //if (!loadGame) {
             gb.resetBlocks();
-        }
+        //}
         pt = new PlayThread(gb, this);
         pt.start();
     }
