@@ -10,8 +10,9 @@ import java.lang.reflect.*;
  * Compilation will fail if your Game requires additional libraries - feel free
  * to follow up on Piazza or via email if this is the case.
  */
-public class CompilationTest {
 
+public class CompilationTest {
+/*
     @Test
 
     public void testMain() {
@@ -57,4 +58,6 @@ public class CompilationTest {
         );
         System.out.println("Next step is the demo with your TA. \n\n");
     }
+    */
+
 }

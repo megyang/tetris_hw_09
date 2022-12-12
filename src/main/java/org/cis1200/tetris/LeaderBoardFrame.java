@@ -11,11 +11,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import static org.cis1200.tetris.Tetris.LEADERBOARD_PATH;
-
 public class LeaderBoardFrame extends JFrame {
     String[] cols = new String[]{"name", "score"};
     DefaultTableModel defaultModel = new DefaultTableModel(cols, 0);
+    private final String leaderBoardFile = "leaderboard";
     private TableRowSorter<TableModel> sorter;
     JButton mainMenuButton = new JButton("main menu");
     JPanel myPanel = new JPanel();
@@ -23,10 +22,9 @@ public class LeaderBoardFrame extends JFrame {
     JTable leaderBoard = new JTable(defaultModel);
 
     public LeaderBoardFrame() {
-
+        this.setSize(610, 850);
         myPanel.setVisible(true);
         this.setLayout(new FlowLayout());
-        this.setSize(500, 250);
         this.add(mainMenuButton);
         this.add(myPanel);
         myPanel.add(new JScrollPane(leaderBoard));
@@ -44,14 +42,13 @@ public class LeaderBoardFrame extends JFrame {
         FileOutputStream fs = null;
         ObjectOutputStream os = null;
         try {
-            fs = new FileOutputStream(LEADERBOARD_PATH);
+            fs = new FileOutputStream(leaderBoardFile);
             os = new ObjectOutputStream(fs);
             os.writeObject(defaultModel.getDataVector());
             os.close();
             fs.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            System.out.println("\nCouldn't save to " + LEADERBOARD_PATH + " \nMake sure it is a valid path");
+        } catch (Exception e) {
+            System.out.println("couldn't save the leaderboard to file");
         }
 
     }
@@ -63,13 +60,13 @@ public class LeaderBoardFrame extends JFrame {
 
         FileInputStream fs = null;
         try {
-            fs = new FileInputStream(LEADERBOARD_PATH);
+            fs = new FileInputStream(leaderBoardFile);
             ObjectInputStream os = new ObjectInputStream(fs);
             defaultModel.setDataVector((Vector<Vector>) os.readObject(), colId);
             os.close();
             fs.close();
         } catch (Exception e) {
-            System.out.println(e.getMessage()+"\nNo saved leaderboard yet\n");
+            System.out.println("no leaderboard loaded yet");
         }
     }
 

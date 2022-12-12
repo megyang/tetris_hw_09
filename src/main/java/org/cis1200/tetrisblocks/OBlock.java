@@ -6,6 +6,6 @@ import java.awt.*;
 
 public class OBlock extends Block {
     public OBlock() {
-        super(new int[][]{{1,1},{1,1}}, Color.yellow);
+        super(new int[][]{{1, 1}, {1, 1}}, Color.yellow);
     }
 }

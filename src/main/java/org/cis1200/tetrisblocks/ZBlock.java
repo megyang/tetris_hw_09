@@ -6,6 +6,6 @@ import java.awt.*;
 
 public class ZBlock extends Block {
     public ZBlock() {
-        super(new int[][]{{1,1,0},{0,1,1}}, Color.red);
+        super(new int[][]{{1, 1, 0}, {0, 1, 1}}, Color.red);
     }
 }

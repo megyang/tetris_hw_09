@@ -1,7 +1,9 @@
 package org.cis1200;
 
-import java.io.*;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Iterator;
+import java.io.BufferedReader;
 import java.util.NoSuchElementException;
 
 /**
@@ -14,12 +16,10 @@ import java.util.NoSuchElementException;
  * properly. Do not use the ready() method from BufferedReader.
  */
 public class FileLineIterator implements Iterator<String> {
-
+    private final BufferedReader breader;
+    private String returnLine;
+    private String nextLine;
     // Add the fields needed to implement your FileLineIterator
-    private static FileReader freader = null; //"c:/temp/ocaml.txt"
-    private static BufferedReader br;
-    private String line="";
-    private String nextLine = "";
 
     /**
      * Creates a FileLineIterator for the reader. Fill out the constructor so
@@ -37,26 +37,27 @@ public class FileLineIterator implements Iterator<String> {
      * @throws IllegalArgumentException if reader is null
      */
     public FileLineIterator(BufferedReader reader) {
-        br = reader;
-        next();
-    }
-/*
-    private String readline(BufferedReader br) {
-        String line;
-        try {
-            line = br.readLine();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        this.breader = reader;
+        if (reader == null) {
+            throw new IllegalArgumentException();
         }
-        return line;
+        try {
+            nextLine = this.breader.readLine();
+            //System.out.println(returnLine);
+        } catch (IOException e) {
+            nextLine = null;
+        }
+
+        // Complete this constructor.
+
     }
-*/
+
     /**
      * Creates a FileLineIterator from a provided filePath by creating a
      * FileReader and BufferedReader for the file.
      * <p>
      * DO NOT MODIFY THIS METHOD.
-     * 
+     *
      * @param filePath - a string representing the file
      * @throws IllegalArgumentException if filePath is null or if the file
      *                                  doesn't exist
@@ -77,14 +78,18 @@ public class FileLineIterator implements Iterator<String> {
      *                                  doesn't exist
      */
     public static BufferedReader fileToReader(String filePath) {
-
+        FileReader freader;
+        BufferedReader bufferReader = null;
+        if (filePath == null) {
+            throw new IllegalArgumentException();
+        }
         try {
             freader = new FileReader(filePath);
-        } catch (FileNotFoundException e) {
-            throw new IllegalArgumentException(e);
+            bufferReader = new BufferedReader(freader);
+        } catch (Exception e) {
+            throw new IllegalArgumentException();
         }
-        br = new BufferedReader(freader);
-        return br; // Complete this method.
+        return bufferReader;
     }
 
     /**
@@ -95,19 +100,20 @@ public class FileLineIterator implements Iterator<String> {
      * BufferedReader.
      *
      * @return a boolean indicating whether the FileLineIterator can produce
-     *         another line from the file
+     * another line from the file
      */
     @Override
     public boolean hasNext() {
-        try {
-            if(nextLine==null) {
-                br.close();
-                //freader.close();
+        if (nextLine != null) {
+            return (true);
+        } else {
+            try {
+                breader.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            return (false);
         }
-        return nextLine!=null;
     }
 
     /**
@@ -126,17 +132,20 @@ public class FileLineIterator implements Iterator<String> {
      */
     @Override
     public String next() {
+        if (nextLine == null) {
+            throw new NoSuchElementException();
+        } else {
+
             try {
-                if (nextLine==null) {
-                    throw new NoSuchElementException();
-                } else {
-                    line = nextLine; //assign next line value to line for return
-                    nextLine = br.readLine();  //read next line
-                }
+                returnLine = nextLine;
+                nextLine = this.breader.readLine();
+
+                //System.out.println(returnLine);
             } catch (IOException e) {
                 nextLine = null;
-                //throw new RuntimeException(e);
+                throw new NoSuchElementException();
             }
-            return line;
+            return returnLine; // Complete this method.
         }
+    }
 }

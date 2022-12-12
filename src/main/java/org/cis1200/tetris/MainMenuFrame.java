@@ -9,12 +9,10 @@ public class MainMenuFrame extends JFrame {
     JButton leaderboardButton = new JButton("leaderboard");
     JButton startButton = new JButton("start game");
     JButton quitButton = new JButton("quit game");
+    MainMenuFrame mmf;
     JButton instructionsButton = new JButton("instructions");
-    MainMenuFrame sf;
 
     public MainMenuFrame() {
-
-        this.setTitle("Startup Form");
         this.setLayout(new FlowLayout());//Set layout to be FlowLayout explicitly.
         this.add(startButton);
         this.add(leaderboardButton);
@@ -22,14 +20,13 @@ public class MainMenuFrame extends JFrame {
         this.add(instructionsButton);
         this.setSize(500, 500);
         this.setVisible(true);
-        //this.add(instructPanel);
-        sf = this;
-    }
+        mmf = this;
 
-    public void setup() {
-        startButton.addActionListener(e -> {
-            //this.setVisible(false);
-            Tetris.start();
+        startButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                //this.setVisible(false);
+                Tetris.start();
+            }
         });
 
         leaderboardButton.addActionListener(new ActionListener() {
@@ -57,4 +54,14 @@ public class MainMenuFrame extends JFrame {
     }
 
 
+    public static void main(String[] args) {
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new PlayFrame().setVisible(true);
+
+            }
+        });
+
+    }
 }

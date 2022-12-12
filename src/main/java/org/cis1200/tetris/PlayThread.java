@@ -1,5 +1,8 @@
 package org.cis1200.tetris;
 
+import java.io.*;
+import java.util.Scanner;
+
 public class PlayThread extends Thread {
     private final GameBoard gb;
     private final PlayFrame pf;
@@ -10,20 +13,94 @@ public class PlayThread extends Thread {
     private int sleep = 1000;
     private final int speedIncrease = 200;
 
-    public PlayThread(GameBoard gb, PlayFrame pf) {
-        this.gb = gb;
-        this.pf = pf;
+    public PlayThread(GameBoard ga, PlayFrame gf) {
+        this.gb = ga;
+        this.pf = gf;
 
+        gf.updateScore(score);
+        gf.updateLevel(level);
+    }
+
+    public void saveScore() {
+        StringBuilder builder = new StringBuilder();
+        BufferedWriter bw;
+        FileWriter fw;
+        builder.append(score);
+        try {
+            fw = new FileWriter("files/score.txt", false);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        bw = new BufferedWriter(fw);
+        try {
+            bw.write(builder.toString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            bw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public void saveLevel() {
+        StringBuilder builder = new StringBuilder();
+        BufferedWriter bw;
+        FileWriter fw;
+        builder.append(level);
+        try {
+            fw = new FileWriter("files/level.txt", false);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        bw = new BufferedWriter(fw);
+        try {
+            bw.write(builder.toString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            bw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void loadScore() {
+        try {
+            File myObj = new File("files/score.txt");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                score = Integer.parseInt(data);
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
         pf.updateScore(score);
+    }
+
+    public void loadLevel() {
+        try {
+            File myObj = new File("files/level.txt");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                level = Integer.parseInt(data);
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
         pf.updateLevel(level);
     }
-    public void setLevel(int level) {
-        this.level = level;
-    }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
+
     @Override
     public void run() {
         while (true) {

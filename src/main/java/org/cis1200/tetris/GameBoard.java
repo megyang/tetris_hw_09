@@ -6,9 +6,9 @@ import org.cis1200.tetrisblocks.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.util.*;
+import java.util.LinkedList;
 import java.util.List;
-import static org.cis1200.tetris.Tetris.PATH_TO_FALLEN;
+import java.util.Random;
 
 //draw on JFrame
 //override paintComponent method from JPanel
@@ -19,9 +19,11 @@ public class GameBoard extends JPanel {
     private Color[][] fallenBlocks;
     private Block block;
     private final Block[] blocks;
-    private final LinkedList<Block> blockqueue = new LinkedList<>();
+    private final LinkedList<Block> blockQueue = new LinkedList<>();
+    private final PlayFrame pf;
 
     public GameBoard(PlayFrame pf, int inColumns) {
+        this.pf = pf;
         //location of GameArea on the GameForm
         blocks = new Block[]{new IBlock(),
                                 new JBlock(),
@@ -45,51 +47,41 @@ public class GameBoard extends JPanel {
     }
 
     public void produceBlock() {
-        if (blockqueue.size() > 0) {
-            block = blockqueue.remove();
-            System.out.println("Queue size=" + blockqueue.size() + "\n");
-
+        if (blockQueue.size() > 0) {
+            block = blockQueue.remove();
         } else {
             Random r = new Random();
             block = blocks[r.nextInt(blocks.length)];
-            System.out.println("Generated\n");
         }
         block.startPoint(columns);
     }
 
-    /*
-     * Cannot add blocks[] content directly to the queue. Each element in the queue must be an
-     * independent instance. For example, you can have the same shape in the queue multiple times.
-     * Each of them must have its own lifecycle
-     */
-    public void addBlockToQueue() {
+    public void addQueue() {
         Random r = new Random();
-        Block tmpblock = blocks[r.nextInt(blocks.length)];
-        Block newblock = null;
-        if (tmpblock instanceof IBlock) {
-            newblock = new IBlock();
-        } else if (tmpblock instanceof JBlock) {
-            newblock = new JBlock();
-        } else if (tmpblock instanceof LBlock) {
-            newblock = new LBlock();
-        } else if (tmpblock instanceof OBlock) {
-            newblock = new OBlock();
-        } else if (tmpblock instanceof SBlock) {
-            newblock = new SBlock();
-        } else if (tmpblock instanceof TBlock) {
-            newblock = new TBlock();
-        } else if (tmpblock instanceof ZBlock) {
-            newblock = new ZBlock();
+        Block tmpBlock = blocks[r.nextInt(blocks.length)];
+        Block newBlock = null;
+        if (tmpBlock instanceof IBlock) {
+            newBlock = new IBlock();
+        } else if (tmpBlock instanceof JBlock) {
+            newBlock = new JBlock();
+        } else if (tmpBlock instanceof OBlock) {
+            newBlock = new OBlock();
+        } else if (tmpBlock instanceof SBlock) {
+            newBlock = new SBlock();
+        } else if (tmpBlock instanceof TBlock) {
+            newBlock = new TBlock();
+        } else if (tmpBlock instanceof ZBlock) {
+            newBlock = new ZBlock();
+        } else if (tmpBlock instanceof LBlock) {
+            newBlock = new LBlock();
         }
-
-        blockqueue.add(newblock);
+        blockQueue.add(newBlock);
     }
 
-    //Return duplicated LinkedList for proper encapsulation
-    public LinkedList<Block> getBlockqueue() {
-        LinkedList<Block> dupblk = new LinkedList<>();
-        dupblk.addAll(blockqueue);
-        return dupblk;
+    public LinkedList<Block> getBlockQueue() {
+        LinkedList<Block> copiedBlockQueue = new LinkedList<>();
+        copiedBlockQueue.addAll(blockQueue);
+        return copiedBlockQueue;
     }
 
     private boolean checkBottomBounds() {
@@ -231,7 +223,6 @@ public class GameBoard extends JPanel {
         if (block == null) {
             return;
         }
-        //Dynamic dispatching
         block.rotate();
         if (block.getX() < 0) {
             block.setX(0);
@@ -404,8 +395,8 @@ public class GameBoard extends JPanel {
 
     public void saveFallenBlocks() {
         StringBuilder builder = new StringBuilder();
-        BufferedWriter bw = null;
-        FileWriter fw = null;
+        BufferedWriter bw;
+        FileWriter fw;
         String color;
         for (int i = 0; i < fallenBlocks.length; i++) {
             for (int j = 0; j < fallenBlocks[i].length; j++) {
@@ -418,53 +409,49 @@ public class GameBoard extends JPanel {
                 } else {
                     builder.append("null");
                 }
-                if (j < fallenBlocks[i].length - 1)//if this is not the last row element
-                    builder.append(",");//then add comma (if you don't like commas you can use spaces)
+                //check
+                if (j < fallenBlocks.length - 1) {
+                    builder.append(",");
+                }
             }
-            if (i < fallenBlocks.length - 1) {
-                builder.append("\n");
-            }
+            builder.append("\n");
         }
 
         try {
-            fw = new FileWriter(PATH_TO_FALLEN, false);
-            bw = new BufferedWriter(fw);
+            fw = new FileWriter("files/fallenblocks.csv", false);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        bw = new BufferedWriter(fw);
+        try {
             bw.write(builder.toString());
         } catch (IOException e) {
-            System.out.println(e.getMessage());
-            System.out.println("\nCouldn't save to " + PATH_TO_FALLEN + " \nMake sure it is a valid path");
+            throw new RuntimeException(e);
         }
         try {
-            if(bw!=null) {
-                bw.close();
-            }
+            bw.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
     }
 
-    public void loadFallenblocks() {
-        BufferedReader br;
-        try {
-            br = FileLineIterator.fileToReader(PATH_TO_FALLEN);
-        } catch (Exception e) {
-            System.out.println("Problem reading from " + PATH_TO_FALLEN + " You need to save a game first\n");
-            return;
-        }
-        List<String[]> fallenList = TetrisParser.csvDataToFallen(br);
+    public void loadFallenBlocks() {
+        BufferedReader br = FileLineIterator.fileToReader("files/fallenblocks.csv");
+        List<String[]> parsedBlockList = TetrisParser.csvDataToFallenBlocks(br);
         resetBlocks();
-        int i = 0, j;
-        for (String[] line : fallenList) {
+        int i = 0;
+        int j = 0;
+        for (String[] line : parsedBlockList) {
             j = 0;
             for (String s : line) {
                 if (s.equals("null")) {
                     fallenBlocks[i][j] = null;
                 } else {
-                    String[] colors = s.split(";");
-                    int r = Integer.parseInt(colors[0]);
-                    int g = Integer.parseInt(colors[1]);
-                    int b = Integer.parseInt(colors[2]);
+                    String[] blocks = s.split(";");
+                    int r = Integer.parseInt(blocks[0]);
+                    int g = Integer.parseInt(blocks[1]);
+                    int b = Integer.parseInt(blocks[2]);
                     fallenBlocks[i][j] = new Color(r, g, b);
                 }
                 j++;
