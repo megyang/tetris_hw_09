@@ -2,37 +2,50 @@ package org.cis1200.tetris;
 
 import javax.swing.*;
 
-public class Tetris {
-    private static GameForm gf;
-    private static StartupForm sf;
-    private static LeaderboardForm lf;
+public class Tetris implements Runnable {
+    private static PlayFrame pf;
+    private static MainMenuFrame mmf;
+    private static LeaderBoardFrame lf;
+    private static Instructions i;
+
+    public Tetris() {
+
+    }
 
     public static void start() {
-        gf.setVisible(true);
-        gf.startGame();
+        pf.setVisible(true);
+        pf.startGame();
     }
 
     public static void showStart() {
-        sf.setVisible(true);
+        mmf.setVisible(true);
+    }
+
+    public static void showInstructions() {
+        i.setVisible(true);
     }
 
     public static void gameOver(int score) {
 
         String userName = JOptionPane.showInputDialog("game over!\n please enter your name: ");
-        gf.setVisible(false);
+        pf.setVisible(false);
         lf.addPlayer(userName, score);
     }
+
     public static void showLeaderboard() {
         lf.setVisible(true);
     }
+
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                gf = new GameForm();
-                sf = new StartupForm();
-                lf = new LeaderboardForm();
-
-                sf.setVisible(true);
+                pf = new PlayFrame();
+                mmf = new MainMenuFrame();
+                lf = new LeaderBoardFrame();
+                i = new Instructions();
+                pf.start();
+                mmf.setVisible(true);
+                pf.setVisible(true);
             }
         });
     }

@@ -4,10 +4,11 @@ import org.cis1200.tetris.Block;
 
 import java.awt.*;
 
-public class IShape extends Block{
-    public IShape() {
+public class IBlock extends Block {
+    public IBlock() {
         super(new int[][]{{1, 1, 1, 1}}, Color.CYAN);
     }
+
     @Override
     public void rotate() {
         super.rotate();

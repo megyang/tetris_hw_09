@@ -11,17 +11,18 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-public class LeaderboardForm extends JFrame {
-    String[] cols = new String[] {"name","score"};
+public class LeaderBoardFrame extends JFrame {
+    String[] cols = new String[]{"name", "score"};
     DefaultTableModel defaultModel = new DefaultTableModel(cols, 0);
-    private String leaderBoardFile = "leaderboard";
+    private final String leaderBoardFile = "leaderboard";
     private TableRowSorter<TableModel> sorter;
     JButton mainMenuButton = new JButton("main menu");
     JPanel myPanel = new JPanel();
 
     JTable leaderBoard = new JTable(defaultModel);
-    public LeaderboardForm() {
 
+    public LeaderBoardFrame() {
+        this.setSize(610, 850);
         myPanel.setVisible(true);
         this.setLayout(new FlowLayout());
         this.add(mainMenuButton);
@@ -51,7 +52,7 @@ public class LeaderboardForm extends JFrame {
 
     }
 
-    private void tableData(){
+    private void tableData() {
         Vector colId = new Vector();
         colId.add("name");
         colId.add("score");
@@ -60,7 +61,7 @@ public class LeaderboardForm extends JFrame {
         try {
             fs = new FileInputStream(leaderBoardFile);
             ObjectInputStream os = new ObjectInputStream(fs);
-            defaultModel.setDataVector( (Vector<Vector>)os.readObject(), colId);
+            defaultModel.setDataVector((Vector<Vector>) os.readObject(), colId);
             os.close();
             fs.close();
         } catch (Exception e) {
@@ -72,13 +73,13 @@ public class LeaderboardForm extends JFrame {
         leaderBoard.setRowSorter(sorter);
 
         ArrayList<RowSorter.SortKey> keys = new ArrayList<>();
-        keys.add(new RowSorter.SortKey(1,SortOrder.DESCENDING));
+        keys.add(new RowSorter.SortKey(1, SortOrder.DESCENDING));
 
         sorter.setSortKeys(keys);
     }
 
     public void addPlayer(String userName, int score) {
-        defaultModel.addRow(new Object[] {userName, score});
+        defaultModel.addRow(new Object[]{userName, score});
         saveLeaderboard();
         sorter.sort();
         this.setVisible(true);
