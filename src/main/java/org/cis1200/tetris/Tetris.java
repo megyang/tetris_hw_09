@@ -12,6 +12,7 @@ public class Tetris implements Runnable {
     private static final String CONFIG = ".properties";
     public static String PATH_TO_FALLEN = "files/fallenblocks.csv";
     public static String LEADERBOARD_PATH = "files/leaderboard";
+    public static String GAME_STATE="files/game_state.properties";
 
 
     public static void start() {
@@ -70,7 +71,7 @@ public class Tetris implements Runnable {
 
         Properties props;
         try {
-            props = ReadProperties.readConfigFile(CONFIG);
+            props = RWProperties.ReadFile(CONFIG);
             PATH_TO_FALLEN = props.getProperty("PATH_TO_FALLEN");
             LEADERBOARD_PATH = props.getProperty("LEADERBOARD_PATH");
         } catch (IOException e) {

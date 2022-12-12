@@ -3,6 +3,10 @@ package org.cis1200.tetris;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.Properties;
+
+import static org.cis1200.tetris.Tetris.GAME_STATE;
 
 //JFrame is class inside swing package (javax.swing.JFrame)
 //a class extends another class
@@ -20,6 +24,8 @@ public class PlayFrame extends JFrame {
     private final PlayFrame gf;
     static JLabel scoreLabel;
     static JLabel levelLabel;
+    private static int score;
+    private static int level;
     JButton mainMenuButton = new JButton("main");
     JButton saveButton = new JButton("save");
     JButton loadButton = new JButton("load");
@@ -28,6 +34,7 @@ public class PlayFrame extends JFrame {
     public PlayFrame() {
         ga = new GameBoard(this, 10);
         qa = new QueueArea(ga);
+        gt = new PlayThread(ga, this);
         gf = this;
     }
 
@@ -67,13 +74,20 @@ public class PlayFrame extends JFrame {
         });
         mainMenuButton.setFocusable(false);
 
-
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ga.saveFallenBlocks();
+                saveStates();
+            }
+        });
         saveButton.setFocusable(false);
 
         loadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ga.loadFallenblocks();
+                loadStates();
                 loadedgame = true;
 
             }
@@ -93,7 +107,30 @@ public class PlayFrame extends JFrame {
         controls();
         //startGame();
     }
-
+    public void saveStates() {
+        Properties pp = new Properties();
+        pp.setProperty("Score",Integer.toString(score));
+        pp.setProperty("Level",Integer.toString(level));
+        try {
+            RWProperties.WriteFile(GAME_STATE,pp);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public void loadStates() {
+        Properties pp = new Properties();
+        try {
+            pp = RWProperties.ReadFile(GAME_STATE);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        score = Integer.valueOf(pp.getProperty("Score",Integer.toString(score)));
+        level = Integer.valueOf(pp.getProperty("Level",Integer.toString(level)));
+        gt.setScore(score);
+        gt.setLevel(level);
+        updateScore(score);
+        updateLevel(level);
+    }
     private void controls() {
         //add keystrokes; keyboard action ex: key press
         InputMap im = this.getRootPane().getInputMap();
@@ -155,15 +192,20 @@ public class PlayFrame extends JFrame {
         } else {
             loadedgame = false; //if loaded from file, continue and reset flag
         }
-        gt = new PlayThread(ga, this);
         gt.start();
     }
 
     public void updateScore(int score) {
-        scoreLabel.setText("score: " + score);
+        this.score = score;
+        if(scoreLabel!=null) {
+            scoreLabel.setText("score: " + score);
+        }
     }
 
     public void updateLevel(int level) {
-        levelLabel.setText("level: " + level);
+        this.level = level;
+        if(levelLabel!=null) {
+            levelLabel.setText("level: " + level);
+        }
     }
 }

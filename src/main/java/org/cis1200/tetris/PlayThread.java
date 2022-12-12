@@ -1,8 +1,8 @@
 package org.cis1200.tetris;
 
 public class PlayThread extends Thread {
-    private final GameBoard ga;
-    private final PlayFrame gf;
+    private final GameBoard gb;
+    private final PlayFrame pf;
     private int score;
     private int totLines;
     private int clearedLines;
@@ -10,31 +10,37 @@ public class PlayThread extends Thread {
     private int sleep = 1000;
     private final int speedIncrease = 200;
 
-    public PlayThread(GameBoard ga, PlayFrame gf) {
-        this.ga = ga;
-        this.gf = gf;
+    public PlayThread(GameBoard gb, PlayFrame pf) {
+        this.gb = gb;
+        this.pf = pf;
 
-        gf.updateScore(score);
-        gf.updateLevel(level);
+        pf.updateScore(score);
+        pf.updateLevel(level);
+    }
+    public void setLevel(int level) {
+        this.level = level;
     }
 
+    public void setScore(int score) {
+        this.score = score;
+    }
     @Override
     public void run() {
         while (true) {
-            ga.produceBlock();
-            while (ga.moveDown()) {
+            gb.produceBlock();
+            while (gb.moveDown()) {
                 try {
                     Thread.sleep(sleep);
                 } catch (InterruptedException e) {
                     return;
                 }
             }
-            if (ga.checkBounds()) {
+            if (gb.checkBounds()) {
                 Tetris.gameOver(score);
                 break;
             } else {
-                ga.keepFallenBlocks();
-                clearedLines = ga.clearLines();
+                gb.keepFallenBlocks();
+                clearedLines = gb.clearLines();
                 totLines += clearedLines;
                 if (clearedLines == 1) {
                     score += 40 * (level);
@@ -46,12 +52,12 @@ public class PlayThread extends Thread {
                     score += 1200 * (level);
                 }
 
-                gf.updateScore(score);
+                pf.updateScore(score);
 
                 int newLevel = totLines / 5 + 1;
                 if (newLevel > level) {
                     level = newLevel;
-                    gf.updateLevel(level);
+                    pf.updateLevel(level);
                     if (sleep > 100) {
                         sleep -= speedIncrease;
                     }
