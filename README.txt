@@ -59,9 +59,9 @@ PennKey: 34342588
   MainMenuFrame: This class contains several of the actionlisteners to link the button to each of their functions.
   It is just the opening screen that allows the player to start, quit, see the leaderboard, and see the instructions.
 
-  PlayFrame: This class hosts the entire game play including the preview blocks on the side, the score and level,
-  and buttons that link to the File I/O, main menu, and add to queue buttons. Additionally, there is a timer that
-  repaints the entire screen so that there is less delay and flickering. The save and load buttons allow the player
+  PlayFrame: This class hosts the entire game play including the GameBoard, preview blocks on the side, the score
+  and level, and buttons that link to the File I/O, main menu, and add to queue buttons. Additionally, there is a
+  timer that repaints the entire screen so that there is less delay and flickering. The save and load buttons allow the player
   to save any point in the game and restart there. The queue allows the player to see preview blocks if they so choose
   to make the game a bit easier. The main menu allows the player to return to the start window.
 
@@ -75,11 +75,12 @@ PennKey: 34342588
   Tetris: This class manipulates each of the frame and when they are visible then allows the game to run; there are
   also the methods that start and stop the game when the player starts and loses.
 
-  _Block: The list of all the classes with a letter preceding the word block are all the same except for a unique
+  *Block: The list of all the classes with a letter preceding the word block are all the same except for a unique
   2D array. This differentiates each type of block and their corresponding shape and color.
 
   FileLineIterator and TetrisParser: These are classes reused from TwitterBot to read the file in and parse through
-  each line so that the game can be reloaded at the specified state.
+  each line so that the game can be reloaded at the specified state. TetrisParser was modified to check data format
+  to ensure saved game can be properly loaded.
 
   InstructionsWindow: Provides the list of instructions on how to play the game.
 
@@ -102,12 +103,16 @@ PennKey: 34342588
 - Evaluate your design. Is there a good separation of functionality? How well is
   private state encapsulated? What would you refactor, if given the chance?
 
+
   I think there is a decent amount of separation of functionality. I was able to separate each of the many methods
-  into various classes properly. If I had the time I might have added a pause and resume button as well as a function
-  to hold a block, much like the original tetris game. I think there is a decent amount of private state encapsulation.
-  I had many get and other accessor methods that I used to manipulate the private variables and such.
-  LinkedList for queue was not passed directly to the queueArea class. The queue cannot be modified by the
+  into various classes properly. Game play, game display, and game thread were all separated.
+  I think there is good private state encapsulation.
+  I used get, set, and other accessor methods that to manipulate the private fields and such.
+  LinkedList for queuing blocks was not passed directly to the QueueArea class. The queue cannot be modified by the
   QueueArea class, Queue area is only used to display the queue.
+  If I were to refactor, I would add configuration file to avoid hard coding things like file path and some parameters.
+  If I had the time I might have added a pause and resume button as well as a function to hold a block,
+  much like the original tetris game.
 
 ========================
 =: External Resources :=
