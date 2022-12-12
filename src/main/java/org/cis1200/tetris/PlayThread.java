@@ -1,15 +1,15 @@
 package org.cis1200.tetris;
 
-public class GameThread extends Thread {
-    private GameArea ga;
-    private GameForm gf;
+public class PlayThread extends Thread {
+    private GameBoard ga;
+    private PlayFrame gf;
     private int score;
     private int totLines;
     private int clearedLines;
     private int level = 1;
     private int sleep = 1000;
     private int speedIncrease = 200;
-    public GameThread(GameArea ga, GameForm gf){
+    public PlayThread(GameBoard ga, PlayFrame gf){
         this.ga = ga;
         this.gf = gf;
 

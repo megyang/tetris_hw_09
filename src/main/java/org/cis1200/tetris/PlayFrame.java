@@ -12,12 +12,12 @@ import java.awt.event.ActionListener;
 //subclasses inherit public and protected members and override inherited methods
 //overriding is giving a method a different body
 
-public class GameForm extends JFrame {
+public class PlayFrame extends JFrame {
     private boolean loadedgame=false;
-    public GameArea ga;
-    public QueueArea qa;
-    private GameThread gt;
-    private GameForm gf;
+    private GameBoard ga;
+    private QueueArea qa;
+    private PlayThread gt;
+    private PlayFrame gf;
     static JLabel scoreLabel;
     static JLabel levelLabel;
     JButton mainMenuButton = new JButton("main menu");
@@ -26,8 +26,8 @@ public class GameForm extends JFrame {
     JButton saveButton = new JButton("Save");
     JButton loadButton = new JButton("Load");
     JButton newBlockButton = new JButton("Queue");
-    public GameForm() {
-        ga = new GameArea(this, 10);
+    public PlayFrame() {
+        ga = new GameBoard(this, 10);
         qa = new QueueArea(ga);
         gf=this;
         //Thread t = new Thread(qa);
@@ -181,7 +181,7 @@ public class GameForm extends JFrame {
         } else {
             loadedgame=false; //if loaded from file, continue and reset flag
         }
-        gt = new GameThread(ga, this);
+        gt = new PlayThread(ga, this);
         gt.start();
     }
     public void updateScore(int score) {

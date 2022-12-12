@@ -11,9 +11,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import static org.cis1200.tetris.Tetris.LEADERBOARD_PATH;
-import static org.cis1200.tetris.Tetris.PATH_TO_FALLEN;
 
-public class LeaderboardForm extends JFrame {
+public class LeaderboardFrame extends JFrame {
     String[] cols = new String[] {"name","score"};
     DefaultTableModel defaultModel = new DefaultTableModel(cols, 0);
     private TableRowSorter<TableModel> sorter;
@@ -21,7 +20,7 @@ public class LeaderboardForm extends JFrame {
     JPanel myPanel = new JPanel();
 
     JTable leaderBoard = new JTable(defaultModel);
-    public LeaderboardForm() {
+    public LeaderboardFrame() {
 
         myPanel.setVisible(true);
         this.setLayout(new FlowLayout());

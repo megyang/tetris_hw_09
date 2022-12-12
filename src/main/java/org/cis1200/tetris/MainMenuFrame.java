@@ -3,17 +3,16 @@ package org.cis1200.tetris;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
 import javax.swing.*;
 
-public class StartupForm extends JFrame{
+public class MainMenuFrame extends JFrame{
     JButton leaderboardButton = new JButton("leaderboard");
     JButton startButton = new JButton("start game");
     JButton quitButton = new JButton("quit game");
     JButton instructionsButton = new JButton("instructions");
     JPanel instructPanel = new JPanel();
-    StartupForm sf;
-    public StartupForm() {
+    MainMenuFrame sf;
+    public MainMenuFrame() {
 
         this.setTitle("Startup Form");
         this.setLayout(new FlowLayout());//Set layout to be FlowLayout explicitly.

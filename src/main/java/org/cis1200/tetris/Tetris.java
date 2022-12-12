@@ -1,20 +1,13 @@
 package org.cis1200.tetris;
 
-import org.cis1200.FileLineIterator;
-
 import javax.swing.*;
-import java.awt.*;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.List;
 import java.util.Properties;
 
-import org.cis1200.tetris.ReadProperties;
-
 public class Tetris implements Runnable {
-    private static GameForm gf;
-    private static StartupForm sf;
-    private static LeaderboardForm lf;
+    private static PlayFrame gf;
+    private static MainMenuFrame sf;
+    private static LeaderboardFrame lf;
     private static String CONFIG = ".properties";
     public static String PATH_TO_FALLEN = "files/fallenblocks.csv";
     public static String LEADERBOARD_PATH = "files/leaderboard";
@@ -40,9 +33,9 @@ public class Tetris implements Runnable {
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                gf = new GameForm();
-                sf = new StartupForm();
-                lf = new LeaderboardForm();
+                gf = new PlayFrame();
+                sf = new MainMenuFrame();
+                lf = new LeaderboardFrame();
                 gf.start();
                 sf.setup();
                 sf.setVisible(true);
@@ -56,9 +49,9 @@ public class Tetris implements Runnable {
      */
     @Override
     public void run() {
-        gf = new GameForm();
-        sf = new StartupForm();
-        lf = new LeaderboardForm();
+        gf = new PlayFrame();
+        sf = new MainMenuFrame();
+        lf = new LeaderboardFrame();
         gf.start();
         sf.setup();
         sf.setVisible(true);

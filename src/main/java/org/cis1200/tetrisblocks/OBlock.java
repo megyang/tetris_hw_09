@@ -4,8 +4,8 @@ import org.cis1200.tetris.Block;
 
 import java.awt.*;
 
-public class OShape extends Block {
-    public OShape() {
+public class OBlock extends Block {
+    public OBlock() {
         super(new int[][]{{1,1},{1,1}}, Color.yellow);
     }
 }

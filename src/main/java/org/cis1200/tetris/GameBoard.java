@@ -1,6 +1,5 @@
 package org.cis1200.tetris;
 
-import com.google.gson.reflect.TypeToken;
 import org.cis1200.FileLineIterator;
 import org.cis1200.tetrisblocks.*;
 
@@ -14,7 +13,7 @@ import static org.cis1200.tetris.Tetris.PATH_TO_FALLEN;
 
 //draw on JFrame
 //override paintComponent method from JPanel
-public class GameArea extends JPanel {
+public class GameBoard extends JPanel {
     private int rows;
     private int columns;
     private int cellSize;
@@ -25,18 +24,18 @@ public class GameArea extends JPanel {
     private Block queuedBlock;
     private LinkedList<Block> blockqueue=new LinkedList<>();
 
-    private GameForm gf;
+    private PlayFrame gf;
 
-    public GameArea(GameForm gf, int inColumns) {
+    public GameBoard(PlayFrame gf, int inColumns) {
         this.gf = gf;
         //location of GameArea on the GameForm
-        blocks = new Block[]{ new IShape(),
-                new JShape(),
-                new LShape(),
-                new OShape(),
-                new SShape(),
-                new TShape(),
-                new ZShape()};
+        blocks = new Block[]{ new IBlock(),
+                new JBlock(),
+                new LBlock(),
+                new OBlock(),
+                new SBlock(),
+                new TBlock(),
+                new ZBlock()};
 
         this.setBounds(0,0,400,800);
         this.setBackground(Color.lightGray);
@@ -73,20 +72,20 @@ public class GameArea extends JPanel {
         Random r = new Random();
         Block tmpblock = blocks[r.nextInt(blocks.length)];
         Block newblock = null;
-        if ( tmpblock instanceof IShape) {
-            newblock = new IShape();
-        } else if (tmpblock instanceof JShape) {
-            newblock = new JShape();
-        } else if (tmpblock instanceof LShape) {
-            newblock = new LShape();
-        } else if (tmpblock instanceof OShape) {
-            newblock = new OShape();
-        } else if (tmpblock instanceof SShape) {
-            newblock = new SShape();
-        } else if (tmpblock instanceof TShape) {
-            newblock = new TShape();
-        } else if (tmpblock instanceof ZShape) {
-            newblock = new ZShape();
+        if ( tmpblock instanceof IBlock) {
+            newblock = new IBlock();
+        } else if (tmpblock instanceof JBlock) {
+            newblock = new JBlock();
+        } else if (tmpblock instanceof LBlock) {
+            newblock = new LBlock();
+        } else if (tmpblock instanceof OBlock) {
+            newblock = new OBlock();
+        } else if (tmpblock instanceof SBlock) {
+            newblock = new SBlock();
+        } else if (tmpblock instanceof TBlock) {
+            newblock = new TBlock();
+        } else if (tmpblock instanceof ZBlock) {
+            newblock = new ZBlock();
         }
 
         blockqueue.add(newblock);

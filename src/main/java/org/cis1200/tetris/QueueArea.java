@@ -8,12 +8,12 @@ import java.util.LinkedList;
 public class QueueArea extends JPanel {
     private int cellSize=20;
     private LinkedList<Block> blockqueue;
-    private GameArea ga;
+    private GameBoard ga;
     private int x = 400;
     private int y = 0;
 
 
-    public QueueArea(GameArea ga){
+    public QueueArea(GameBoard ga){
         this.ga = ga;
         this.setBounds(410,0,400,400);
         //this.setBackground(Color.GREEN);
