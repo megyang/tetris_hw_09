@@ -87,7 +87,7 @@ public class FileLineIterator implements Iterator<String> {
             freader = new FileReader(filePath);
             bufferReader = new BufferedReader(freader);
         } catch (Exception e) {
-            throw new IllegalArgumentException();
+            System.out.println(e.getMessage()+"\nNo saved game found.\n");
         }
         return bufferReader;
     }

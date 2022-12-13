@@ -410,7 +410,7 @@ public class GameBoard extends JPanel {
                     builder.append("null");
                 }
                 //check
-                if (j < fallenBlocks.length - 1) {
+                if (j < fallenBlocks[i].length - 1) {
                     builder.append(",");
                 }
             }
@@ -438,6 +438,9 @@ public class GameBoard extends JPanel {
 
     public void loadFallenBlocks() {
         BufferedReader br = FileLineIterator.fileToReader("files/fallenblocks.csv");
+        if(br==null) {
+            return;
+        }
         List<String[]> parsedBlockList = TetrisParser.csvDataToFallenBlocks(br);
         resetBlocks();
         int i = 0;
