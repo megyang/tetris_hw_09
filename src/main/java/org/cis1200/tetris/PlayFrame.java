@@ -27,9 +27,13 @@ public class PlayFrame extends JFrame {
     JButton addToQueueButton = new JButton("queue");
 
     public PlayFrame() {
+        scoreLabel = new JLabel("score: 0");
+        levelLabel = new JLabel("level: 1");
         gb = new GameBoard(pf, 10);
         qa = new QueueArea(gb);
+        pt = new PlayThread(gb, this);
         pf = this;
+
     }
 
     public void start() {
@@ -37,8 +41,7 @@ public class PlayFrame extends JFrame {
         this.add(qa);
         this.setSize(610, 850);
 
-        scoreLabel = new JLabel("score: 0");
-        levelLabel = new JLabel("level: 1");
+
         JPanel p = new JPanel();
         p.add(scoreLabel);
         p.add(levelLabel);
@@ -56,10 +59,6 @@ public class PlayFrame extends JFrame {
 
         mainMenuButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //this.setVisible(false);
-                if (pt != null) {
-                    pt.interrupt();
-                }
                 Tetris.showStart();
             }
         });
@@ -67,7 +66,6 @@ public class PlayFrame extends JFrame {
 
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //this.setVisible(false);
                 gb.saveFallenBlocks();
                 pt.saveScore();
                 pt.saveLevel();
@@ -155,11 +153,21 @@ public class PlayFrame extends JFrame {
     }
 
     public void startGame() {
-        //if (!loadGame) {
+        if (!loadGame) {
             gb.resetBlocks();
-        //}
-        pt = new PlayThread(gb, this);
-        pt.start();
+        } else {
+            loadGame = false;
+            gb.loadFallenBlocks();
+
+        }
+        gb.produceBlock();
+            try {
+                pt.start();
+            } catch (IllegalThreadStateException ie)
+            {
+                pt.interrupt();
+                pt = new PlayThread(gb, this);
+            }
     }
 
     public void updateScore(int score) {
